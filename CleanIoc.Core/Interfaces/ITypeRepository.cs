@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CleanIoc.Core.Enums;
-
-namespace CleanIoc.Core.Interfaces
+﻿namespace CleanIoc.Core.Interfaces
 {
-    public interface ITypeRepository
+    using System;
+    using System.Collections.Generic;
+    using CleanIoc.Core.Enums;
+
+    public interface ITypeRepository : IDisposable
     {
         void AddRegistryContents(ITypeRegistry registry);
 

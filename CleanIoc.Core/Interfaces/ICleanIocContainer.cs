@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CleanIoc.Core.Interfaces
+﻿namespace CleanIoc.Core.Interfaces
 {
-    public interface ICleanIocContainer
+    using System;
+    using System.Collections.Generic;
+
+    public interface ICleanIocContainer : IDisposable
     {
         T Get<T>() where T : class;
 

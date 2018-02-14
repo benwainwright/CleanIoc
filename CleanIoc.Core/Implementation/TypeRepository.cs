@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Reflection;
     using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Exceptions;
     using CleanIoc.Core.Interfaces;
 
     internal class TypeRepository : ITypeRepository
@@ -39,7 +40,12 @@
         public IList<object> GetInstances(Type from)
         {
             var returnVal = new List<object>();
-            var typemap = Maps[from];
+            TypeMap typemap;
+            try {
+                typemap = Maps[from];
+            } catch(KeyNotFoundException ex) {
+                throw new TypeSupplyException(string.Format("No mapping was found for type {0}", from.FullName), ex);
+            }
             if (typemap.Size > 0) {
                 var types = new List<Type>(typemap.Types);
                 foreach (var type in types) {
@@ -103,6 +109,23 @@
             }
 
             return Activator.CreateInstance(type, values.ToArray());
+        }
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue) {
+                if (disposing) {
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }
