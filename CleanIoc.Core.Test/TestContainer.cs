@@ -14,7 +14,7 @@ namespace CleanIoc.Core.Test
         {
             var registry = new SimpleTypeRegistry();
             registry.MapBetween<ISimpleInterface, EmptyClassWithDefaultConstructor>();
-            var builder = new TypeContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -28,7 +28,7 @@ namespace CleanIoc.Core.Test
         {
             var registry = new SimpleTypeRegistry();
             registry.MapBetween<ISimpleInterface, EmptyClassWithDefaultConstructor>();
-            var builder = new TypeContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -45,7 +45,7 @@ namespace CleanIoc.Core.Test
             var registry = new SimpleTypeRegistry();
             registry.MapBetween<ISimpleInterface, EmptyClassWithDefaultConstructor>();
             registry.MapBetween<ISecondInterface, EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            var builder = new TypeContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -67,7 +67,7 @@ namespace CleanIoc.Core.Test
             registry.MapBetween<ISimpleInterface, EmptyClassWithDefaultConstructor>();
             registry.MapBetween<ISecondInterface, EmptyClassWithThatOneSimpleObjectInItsConstructor>();
             registry.MapBetween<IThirdInterface, MoreComplicatedClassThatCantBeFullySatisfied>();
-            var builder = new TypeContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -82,7 +82,7 @@ namespace CleanIoc.Core.Test
         [Test]
         public void TestRegistryIsFoundAutomatically()
         {
-            var builder = new TypeContainerBuilder();
+            var builder = new ContainerBuilder();
             builder.AddAssemblyLoader(new RegistryAssemblyLoader());
             var container = builder.Container;
 

@@ -12,7 +12,7 @@ namespace CleanIoc.Sample.App
     {
         static void Main(string[] args)
         {
-            var builder = new TypeContainerBuilder();
+            var builder = new ContainerBuilder();
             var container = builder.Container;
             var instance = container.Get<IMySimpleSampleInterface>();
 

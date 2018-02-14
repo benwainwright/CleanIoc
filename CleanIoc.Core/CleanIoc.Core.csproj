@@ -57,8 +57,8 @@
     <Compile Include="Interfaces\ITypeRegistry.cs" />
     <Compile Include="Interfaces\ITypeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Implementation\TypeContainer.cs" />
-    <Compile Include="Implementation\TypeContainerBuilder.cs" />
+    <Compile Include="Implementation\Container.cs" />
+    <Compile Include="Implementation\ContainerBuilder.cs" />
     <Compile Include="Implementation\TypeMap.cs" />
     <Compile Include="Implementation\TypeRegistry.cs" />
     <Compile Include="Implementation\TypeRepository.cs" />

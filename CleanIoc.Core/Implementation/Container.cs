@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using CleanIoc.Core.Interfaces;
 
-    public class TypeContainer : IContainer
+    public class Container : IContainer
     {
         public bool Initialised { get; private set; } = false;
 
@@ -12,7 +12,7 @@
 
         private TypeRepository Repository { get; set; } = new TypeRepository();
 
-        internal TypeContainer(List<ITypeRegistry> registries)
+        internal Container(List<ITypeRegistry> registries)
         {
             Registries = registries;
         }

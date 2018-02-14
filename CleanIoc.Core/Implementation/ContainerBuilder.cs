@@ -5,7 +5,7 @@
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
 
-    public class TypeContainerBuilder : IContainerBuilder
+    public class ContainerBuilder : IContainerBuilder
     {
         private List<ITypeRegistry> Registries { get; } = new List<ITypeRegistry>();
 
@@ -24,13 +24,13 @@
                     if (scanBehaviour != ScanBehaviour.Off) {
                         Registries.AddRange(GetRegistries());
                     }
-                    container = new TypeContainer(Registries);
+                    container = new Container(Registries);
                 }
                 return container;
             }
         }
 
-        public TypeContainerBuilder(ScanBehaviour scanBehaviour = ScanBehaviour.ScanLoadedAssembliesForRegistries)
+        public ContainerBuilder(ScanBehaviour scanBehaviour = ScanBehaviour.ScanLoadedAssembliesForRegistries)
         {
             this.scanBehaviour = scanBehaviour;
         }
