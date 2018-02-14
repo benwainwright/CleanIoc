@@ -9,7 +9,9 @@
 
     internal class TypeRepository : ITypeRepository
     {
-        private Dictionary<Type, TypeMap> Maps = new Dictionary<Type, TypeMap>();
+        private Dictionary<Type, TypeMap> maps = new Dictionary<Type, TypeMap>();
+
+        private Dictionary<Type, TypeConstructionPlan> plans = new Dictionary<Type, TypeConstructionPlan>();
 
         private IConstructorSelectionStrategy ConstructorSelectionStrategy { get; set; }
 
@@ -31,10 +33,13 @@
 
         public void AddTypeMapping(Type from, Type to, Lifetime lifetime = Lifetime.Singleton)
         {
-            if (!Maps.ContainsKey(from)) {
-                Maps[from] = new TypeMap(from, lifetime);
+            if (!maps.ContainsKey(from)) {
+                maps[from] = new TypeMap(from, lifetime, ConstructorSelectionStrategy);
             }
-            Maps[from].Add(to);
+            maps[from].Add(to);
+            if (plans.Count > 0) {
+                plans.Clear();
+            }
         }
 
         public IList<object> GetInstances(Type from)
@@ -42,32 +47,25 @@
             var returnVal = new List<object>();
             TypeMap typemap;
             try {
-                typemap = Maps[from];
+                typemap = maps[from];
             } catch(KeyNotFoundException ex) {
-                throw new TypeSupplyException(string.Format("No mapping was found for type {0}", from.FullName), ex);
+                throw new MappingNotFoundException(string.Format("No mapping was found for type {0}", from.FullName), ex);
             }
             if (typemap.Size > 0) {
                 var types = new List<Type>(typemap.Types);
                 foreach (var type in types) {
-                    object instance = null;
-                    if(typemap.Lifetime == Lifetime.Singleton) {
-                        instance = typemap.GetLoadedInstanceOf(type);
-                        if(instance == null) {
-                            instance = MakeInstance(type);
-                            typemap.AddLoadedInstanceOf(type, instance);
-                        }
-                    } else {
-                        instance = MakeInstance(type);
+                    if(!plans.ContainsKey(type)) {
+                        plans[type] = new TypeConstructionPlan(from, maps);
                     }
-                    if (instance != null) {
-                        returnVal.Add(instance);
+                    if(plans[type].CanBeConstructed(with: type)) {
+                        returnVal.Add(plans[type].GetInstance());
                     }
                 }
             }
             return returnVal;
         }
 
-        private object MakeInstance(Type type)
+        private object MakeInstance(Type type, IList<IConstructorAttempt> attempt)
         {
             // Always prefer the default constructor; this will effectively
             // be our base case for the recursion that is going on here

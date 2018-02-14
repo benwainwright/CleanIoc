@@ -46,11 +46,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clean.cs" />
-    <Compile Include="Exceptions\TypeSupplyException.cs" />
+    <Compile Include="Enums\ConstructionOutcome.cs" />
+    <Compile Include="Enums\MultipleMappingsBehaviour.cs" />
+    <Compile Include="Exceptions\MappingNotFoundException.cs" />
+    <Compile Include="Exceptions\UnableToConstructException.cs" />
+    <Compile Include="Implementation\ConstructorAttempt.cs" />
+    <Compile Include="Implementation\IExecutableConstructor.cs" />
+    <Compile Include="Implementation\TypeConstructionPlan.cs" />
     <Compile Include="Implementation\DefaultConstructorSelectionStrategy.cs" />
     <Compile Include="Enums\Lifetime.cs" />
     <Compile Include="Enums\ScanBehaviour.cs" />
     <Compile Include="Exceptions\CleanIocException.cs" />
+    <Compile Include="Interfaces\IAttemptedConstructor.cs" />
+    <Compile Include="Implementation\IInjectedParameter.cs" />
     <Compile Include="Interfaces\IContainerBuilder.cs" />
     <Compile Include="Implementation\RegistryAssemblyLoader.cs" />
     <Compile Include="Interfaces\IAssemblyLoader.cs" />
