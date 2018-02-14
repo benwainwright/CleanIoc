@@ -9,6 +9,6 @@ namespace CleanIoc.Core.Interfaces
 
         IList<T> GetAll<T>() where T : class;
 
-        IServiceProvider ServiceProvider { get; };
+        IServiceProvider ServiceProvider { get; }
     }
 }
