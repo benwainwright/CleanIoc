@@ -65,50 +65,6 @@
             return returnVal;
         }
 
-        private object MakeInstance(Type type, IList<IConstructorAttempt> attempt)
-        {
-            // Always prefer the default constructor; this will effectively
-            // be our base case for the recursion that is going on here
-            object instance;
-            try {
-                return Activator.CreateInstance(type);
-            } catch (MissingMethodException) {
-                // Carry on
-            }
-            var constructors = new List<ConstructorInfo>(type.GetConstructors());
-            do {
-                var constructor = ConstructorSelectionStrategy.SelectConstructor(type, constructors);
-                instance = TryToMakeInstanceWithConstructor(type, constructor);
-                constructors.Remove(constructor);
-            } while (instance == null && constructors.Count > 0);
-
-            if (instance == null) {
-                throw new ArgumentException($"Could not create instance of {type.Name} as was unable to find a matching constructor");
-            }
-
-            return instance;
-        }
-
-        private object TryToMakeInstanceWithConstructor(Type type, ConstructorInfo constructor)
-        {
-            if (type == null || constructor == null) {
-                return null;
-            }
-
-            var parameters = constructor.GetParameters();
-            var values = new List<object>();
-
-            foreach (var param in parameters) {
-                IList<object> instances = GetInstances(param.ParameterType);
-                if(instances.Count == 0) {
-                    return null;
-                }
-                values.Add(instances[0]);
-            }
-
-            return Activator.CreateInstance(type, values.ToArray());
-        }
-
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
