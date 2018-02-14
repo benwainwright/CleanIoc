@@ -24,6 +24,7 @@
                 }
             }
             LoadAssembliesContainingRegistries(assembliesToScan);
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= AppDomain_ReflectionOnlyAssemblyResolve;
         }
 
         private Assembly AppDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
