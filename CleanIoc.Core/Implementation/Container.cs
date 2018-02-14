@@ -2,15 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using global::CleanIoc.Core.Interfaces;
+    using CleanIoc.Core.Interfaces;
 
-    internal class Container : ICleanIocContainer
+    internal class Container : ICleanIocContainer, IServiceProvider
     {
         public bool Initialised { get; private set; } = false;
 
         private List<ITypeRegistry> Registries { get; set; }
 
         private TypeRepository Repository { get; set; } = new TypeRepository();
+
+        public IServiceProvider ServiceProvider { get { return this;  } }
 
         internal Container(List<ITypeRegistry> registries)
         {
@@ -22,6 +24,15 @@
             foreach (var registry in Registries) {
                 Repository.AddRegistryContents(registry);
             }
+        }
+
+        public object GetService(Type from)
+        {
+            var instances = InitialiseAndGetInstances(from);
+            if (instances.Count == 0) {
+                return null;
+            }
+            return instances[0];
         }
 
         public T Get<T>()
@@ -37,17 +48,22 @@
         public IList<T> GetAll<T>()
             where T : class
         {
-            if(!Initialised) {
-                Initialise();
-                Initialised = true;
-            }
             Type from = typeof(T);
             var returnVal = new List<T>();
-            var instances = Repository.GetInstances(from);
+            var instances = InitialiseAndGetInstances(from);
             foreach(object instance in instances) {
                 returnVal.Add(instance as T);
             }
             return returnVal;
+        }
+
+        private IList<object> InitialiseAndGetInstances(Type from)
+        {
+            if (!Initialised) {
+                Initialise();
+                Initialised = true;
+            }
+            return Repository.GetInstances(from);
         }
     }
 }

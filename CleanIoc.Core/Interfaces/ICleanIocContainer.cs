@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CleanIoc.Core.Interfaces
 {
@@ -7,5 +8,7 @@ namespace CleanIoc.Core.Interfaces
         T Get<T>() where T : class;
 
         IList<T> GetAll<T>() where T : class;
+
+        IServiceProvider ServiceProvider { get; };
     }
 }
