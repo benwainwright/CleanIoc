@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CleanIoc.Core.Interfaces
+﻿namespace CleanIoc.Core.Interfaces
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
     public interface IConstructorSelectionStrategy
     {
         ConstructorInfo SelectConstructor(Type type, IList<ConstructorInfo> remainingConstructors);

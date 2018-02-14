@@ -6,6 +6,6 @@
     {
         void AddRegistry(TypeRegistry registry);
 
-        IContainer Container { get; }
+        ICleanIocContainer Container { get; }
     }
 }

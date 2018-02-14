@@ -2,9 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using CleanIoc.Core.Interfaces;
+    using global::CleanIoc.Core.Interfaces;
 
-    public class Container : IContainer
+    public class Container : ICleanIocContainer
     {
         public bool Initialised { get; private set; } = false;
 

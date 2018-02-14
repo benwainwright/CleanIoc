@@ -45,15 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultConstructorSelectionStrategy.cs" />
+    <Compile Include="Clean.cs" />
+    <Compile Include="Implementation\DefaultConstructorSelectionStrategy.cs" />
     <Compile Include="Enums\Lifetime.cs" />
     <Compile Include="Enums\ScanBehaviour.cs" />
     <Compile Include="Exceptions\CleanIocException.cs" />
-    <Compile Include="IContainerBuilder.cs" />
+    <Compile Include="Interfaces\IContainerBuilder.cs" />
     <Compile Include="Implementation\RegistryAssemblyLoader.cs" />
     <Compile Include="Interfaces\IAssemblyLoader.cs" />
     <Compile Include="Interfaces\IConstructorSelectionStrategy.cs" />
-    <Compile Include="Interfaces\IContainer.cs" />
+    <Compile Include="Interfaces\ICleanIocContainer.cs" />
     <Compile Include="Interfaces\ITypeRegistry.cs" />
     <Compile Include="Interfaces\ITypeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using CleanIoc.Core.Interfaces;
-
-namespace CleanIoc.Core
+﻿namespace CleanIoc.Core.Implementation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using CleanIoc.Core.Interfaces;
+
     internal class DefaultConstructorSelectionStrategy : IConstructorSelectionStrategy
     {
         public ConstructorInfo SelectConstructor(Type type, IList<ConstructorInfo> remainingConstructors)

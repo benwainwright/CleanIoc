@@ -13,9 +13,9 @@
 
         private readonly ScanBehaviour scanBehaviour;
 
-        private IContainer container;
+        private ICleanIocContainer container;
 
-        public IContainer Container
+        public ICleanIocContainer Container
         {
             get
             {
