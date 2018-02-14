@@ -74,7 +74,6 @@
             //
             // :-(
             foreach (var theInterface in type.GetInterfaces()) {
-
                 if(theInterface.AssemblyQualifiedName.Equals(registryType.AssemblyQualifiedName, StringComparison.InvariantCultureIgnoreCase)) {
                     return true;
                 }
