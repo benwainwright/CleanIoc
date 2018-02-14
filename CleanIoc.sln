@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Core.Test", "Clean
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{E00359D0-A5E3-494E-9128-341AC4AF5EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Sample.Library", "CleanIoc.Sample.Library\CleanIoc.Sample.Library.csproj", "{E78F6DA7-8159-4CAB-8904-33A5CEA59746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Sample.App", "Sample\CleanIoc.Sample.App\CleanIoc.Sample.App.csproj", "{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Sample.Interfaces", "CleanIoc.Sample.Interfaces\CleanIoc.Sample.Interfaces.csproj", "{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Sample.Interfaces", "Sample\CleanIoc.Sample.Interfaces\CleanIoc.Sample.Interfaces.csproj", "{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Sample.App", "CleanIoc.Sample.App\CleanIoc.Sample.App.csproj", "{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanIoc.Sample.Library", "Sample\CleanIoc.Sample.Library\CleanIoc.Sample.Library.csproj", "{E78F6DA7-8159-4CAB-8904-33A5CEA59746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,26 +29,26 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Release|Any CPU.Build.0 = Release|Any CPU
 		{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E78F6DA7-8159-4CAB-8904-33A5CEA59746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E78F6DA7-8159-4CAB-8904-33A5CEA59746} = {E00359D0-A5E3-494E-9128-341AC4AF5EF7}
-		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90} = {E00359D0-A5E3-494E-9128-341AC4AF5EF7}
 		{12C4F7FC-80CA-4D49-AC6D-E5894133AB36} = {E00359D0-A5E3-494E-9128-341AC4AF5EF7}
+		{FABE9150-CCA5-4ADC-BF49-82A0038E1C90} = {E00359D0-A5E3-494E-9128-341AC4AF5EF7}
+		{E78F6DA7-8159-4CAB-8904-33A5CEA59746} = {E00359D0-A5E3-494E-9128-341AC4AF5EF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {142BD397-BF97-4FCF-8446-F42DEEC5E850}

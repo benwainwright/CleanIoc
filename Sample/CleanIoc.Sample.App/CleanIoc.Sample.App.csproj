@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FABE9150-CCA5-4ADC-BF49-82A0038E1C90}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CleanIoc.Sample.Interfaces</RootNamespace>
-    <AssemblyName>CleanIoc.Sample.Interfaces</AssemblyName>
+    <ProjectGuid>{12C4F7FC-80CA-4D49-AC6D-E5894133AB36}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CleanIoc.Sample.App</RootNamespace>
+    <AssemblyName>CleanIoc.Sample.App</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,13 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMySimpleSampleInterface.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CleanIoc.Core.Test\CleanIoc.Core.Test.csproj">
-      <Project>{8EDF4429-251A-416D-BB68-93F227191BCF}</Project>
-      <Name>CleanIoc.Core.Test</Name>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CleanIoc.Core\CleanIoc.Core.csproj">
+      <Project>{10D18948-FC88-45BC-B341-0BCA313D4C8D}</Project>
+      <Name>CleanIoc.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CleanIoc.Sample.Interfaces\CleanIoc.Sample.Interfaces.csproj">
+      <Project>{fabe9150-cca5-4adc-bf49-82a0038e1c90}</Project>
+      <Name>CleanIoc.Sample.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

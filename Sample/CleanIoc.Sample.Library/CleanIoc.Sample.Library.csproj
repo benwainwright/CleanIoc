@@ -45,7 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CleanIoc.Core\CleanIoc.Core.csproj">
+    <ProjectReference Include="..\..\CleanIoc.Core\CleanIoc.Core.csproj">
       <Project>{10d18948-fc88-45bc-b341-0bca313d4c8d}</Project>
       <Name>CleanIoc.Core</Name>
     </ProjectReference>
