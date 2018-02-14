@@ -61,7 +61,6 @@
             }
         }
 
-
         private bool TypeIsDerivedFromRegistryInterface(Type type)
         {
             var registryType = typeof(ITypeRegistry);
