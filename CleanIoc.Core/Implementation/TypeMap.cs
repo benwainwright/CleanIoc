@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using CleanIoc.Core.Enums;
 
-    public class TypeMap
+    internal class TypeMap
     {
         private Type InterfaceType { get; }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CleanIoc.Core;
 using CleanIoc.Core.Implementation;
 using CleanIoc.Sample.Interfaces;
 
@@ -12,7 +13,7 @@ namespace CleanIoc.Sample.App
     {
         static void Main(string[] args)
         {
-            var builder = new ContainerBuilder();
+            var builder = Clean.MakeBuilder();
             var container = builder.Container;
             var instance = container.Get<IMySimpleSampleInterface>();
 

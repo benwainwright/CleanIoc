@@ -4,7 +4,7 @@
 
     public interface IContainerBuilder
     {
-        void AddRegistry(TypeRegistry registry);
+        void AddRegistry(ITypeRegistry registry);
 
         ICleanIocContainer Container { get; }
     }

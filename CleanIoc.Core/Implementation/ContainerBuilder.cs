@@ -5,7 +5,7 @@
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
 
-    public class ContainerBuilder : IContainerBuilder
+    internal class ContainerBuilder : IContainerBuilder
     {
         private List<ITypeRegistry> Registries { get; } = new List<ITypeRegistry>();
 
@@ -63,7 +63,7 @@
             return registries;
         }
 
-        public void AddRegistry(TypeRegistry registry)
+        public void AddRegistry(ITypeRegistry registry)
         {
             Registries.Add(registry);
         }

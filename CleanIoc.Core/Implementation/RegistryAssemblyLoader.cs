@@ -6,7 +6,7 @@
     using System.Reflection;
     using CleanIoc.Core.Interfaces;
 
-    public class RegistryAssemblyLoader : IAssemblyLoader, IDisposable
+    internal class RegistryAssemblyLoader : IAssemblyLoader, IDisposable
     {
         public void Load()
         {

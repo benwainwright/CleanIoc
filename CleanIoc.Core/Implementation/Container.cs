@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using global::CleanIoc.Core.Interfaces;
 
-    public class Container : ICleanIocContainer
+    internal class Container : ICleanIocContainer
     {
         public bool Initialised { get; private set; } = false;
 
