@@ -54,7 +54,7 @@
             foreach(var assembly in loadedAssemblies) {
                 var types = assembly.GetExportedTypes();
                 foreach (var type in types) {
-                    if (type.IsInstanceOfType(registryType)) {
+                    if (registryType.IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface) {
                         var registry = Activator.CreateInstance(type) as TypeRegistry;
                         registries.Add(registry);
                     }
