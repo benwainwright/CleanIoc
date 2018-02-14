@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CleanIoc.Core;
-using CleanIoc.Core.Implementation;
-using CleanIoc.Sample.Interfaces;
-
-namespace CleanIoc.Sample.App
+﻿namespace CleanIoc.Sample.App
 {
+    using System;
+    using CleanIoc.Core;
+    using CleanIoc.Sample.Interfaces;
+
     class Program
     {
         static void Main(string[] args)
@@ -18,7 +13,6 @@ namespace CleanIoc.Sample.App
             var instance = container.Get<IMySimpleSampleInterface>();
 
             Console.WriteLine(string.Format("The message is '{0}'", instance.Message));
-
         }
     }
 }

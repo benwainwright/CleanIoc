@@ -76,8 +76,7 @@ namespace CleanIoc.Core.Test
 
             var second = container.Get<ISecondInterface>();
             Assert.That(second, Is.Not.Null);
-
-          }
+        }
 
         [Test]
         public void TestRegistryIsFoundAutomatically()

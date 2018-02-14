@@ -9,13 +9,16 @@
     {
         public ConstructorInfo SelectConstructor(Type type, IList<ConstructorInfo> remainingConstructors)
         {
-            // TODO for now lets just return the first one in the list
-
-            if(remainingConstructors.Count > 0) {
-                return remainingConstructors[0];
+            int max = -1;
+            ConstructorInfo returnVal = null;
+            foreach(var constructor in remainingConstructors) {
+                var paramaters = constructor.GetParameters();
+                if (paramaters.Length > max) {
+                    returnVal = constructor;
+                    max = paramaters.Length;
+                }
             }
-
-            return null;
+            return returnVal;
         }
     }
 }
