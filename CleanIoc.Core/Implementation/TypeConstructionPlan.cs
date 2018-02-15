@@ -10,6 +10,14 @@
 
     internal class TypeConstructionPlan : IInjectedType
     {
+        private MultipleMappingsBehaviour MultipleMappingsBehaviour { get; }
+
+        private readonly IConstructorSelectionStrategy constructorSelector;
+
+        private readonly Lifetime lifetime;
+
+        private object instance;
+
         public Type Declared { get; }
 
         private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> plans;
@@ -20,19 +28,11 @@
 
         public IEnumerable<Type> PossibleMappings => possibleMappings;
 
-        private MultipleMappingsBehaviour MultipleMappingsBehaviour { get; }
-
         public List<IConstructorAttempt> ConstructorAttempts { get; } = new List<IConstructorAttempt>();
 
         private IExecutableConstructor constructorToUse;
 
         public ConstructionOutcome Outcome { get; private set; }
-
-        private readonly IConstructorSelectionStrategy constructorSelector;
-
-        private readonly Lifetime lifetime;
-
-        private object instance;
 
         public TypeConstructionPlan(ITypeRegistration registration, Dictionary<Type, HashSet<TypeConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
         {
