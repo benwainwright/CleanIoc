@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using CleanIoc.Core.Exceptions;
+    using CleanIoc.Core.Implementation.Construction;
     using CleanIoc.Core.Interfaces;
 
     internal class Repository : IRepository

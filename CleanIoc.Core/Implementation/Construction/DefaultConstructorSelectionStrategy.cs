@@ -1,4 +1,4 @@
-﻿namespace CleanIoc.Core.Implementation
+﻿namespace CleanIoc.Core.Implementation.Construction
 {
     using System;
     using System.Collections.Generic;
