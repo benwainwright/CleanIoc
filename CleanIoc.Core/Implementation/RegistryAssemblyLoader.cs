@@ -6,13 +6,19 @@
     using System.Reflection;
     using CleanIoc.Core.Interfaces;
 
+    // TODO - Fix the loader for .net core
+
     internal class RegistryAssemblyLoader : IAssemblyLoader, IDisposable
     {
         public void Load()
         {
+            /*
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomain_ReflectionOnlyAssemblyResolve;
             var assembliesToScan = new List<string>();
             var domain = AppDomain.CurrentDomain;
+
+            domain.Setu
+            
             var domainSetup = domain.SetupInformation;
 
             if(!domainSetup.DisallowApplicationBaseProbing) {
@@ -25,6 +31,7 @@
             }
             LoadAssembliesContainingRegistries(assembliesToScan);
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= AppDomain_ReflectionOnlyAssemblyResolve;
+            */
         }
 
         private Assembly AppDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)

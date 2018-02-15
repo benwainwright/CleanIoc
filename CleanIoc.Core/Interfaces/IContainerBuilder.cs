@@ -5,5 +5,7 @@
         void AddRegistry(ITypeRegistry registry);
 
         ICleanIocContainer Container { get; }
+
+        void AddAssemblyLoader(IAssemblyLoader loader);
     }
 }

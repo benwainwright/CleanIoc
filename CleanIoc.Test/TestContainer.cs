@@ -17,7 +17,7 @@ namespace CleanIoc.Core.Test
         {
             var registry = new SimpleTypeRegistry();
             registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
-            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -31,7 +31,7 @@ namespace CleanIoc.Core.Test
         {
             var registry = new SimpleTypeRegistry();
             registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
-            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -48,7 +48,7 @@ namespace CleanIoc.Core.Test
             var registry = new SimpleTypeRegistry();
             registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
             registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -70,7 +70,7 @@ namespace CleanIoc.Core.Test
             registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
             registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
             registry.Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>();
-            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -90,7 +90,7 @@ namespace CleanIoc.Core.Test
             registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
             registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
             registry.Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>();
-            var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
+            var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
@@ -140,8 +140,7 @@ namespace CleanIoc.Core.Test
         [Test]
         public void TestRegistryIsFoundAutomatically()
         {
-            var builder = new ContainerBuilder();
-            builder.AddAssemblyLoader(new RegistryAssemblyLoader());
+            var builder = Clean.MakeBuilder();
             var container = builder.Container;
 
             var first = container.Get<ISimpleInterface>();
