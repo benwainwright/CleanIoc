@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using CleanIoc.Core.Implementation;
-
-namespace CleanIoc.Core.Exceptions
+﻿namespace CleanIoc.Core.Exceptions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using CleanIoc.Core.Implementation;
+
     public class UnableToConstructException : CleanIocException
     {
         public IList<IConstructorAttempt> AttemptedConstructors { get; set; }
