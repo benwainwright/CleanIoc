@@ -8,7 +8,7 @@
     {
         void AddRegistryContents(ITypeRegistry registry);
 
-        void AddTypeMapping(Type from, Type to, Lifetime lifetime = Lifetime.Singleton);
+        void AddRegistration(ITypeRegistration registration);
 
         IList<object> GetInstances(Type from);
     }

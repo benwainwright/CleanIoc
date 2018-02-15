@@ -7,9 +7,9 @@ namespace CleanIoc.Core.Test.DummyTypes.Registries
     {
         public SimpleTypeRegistry()
         {
-            Map<ISimpleInterface>().To<EmptyClassWithDefaultConstructor>();
-            Map<ISecondInterface>().To<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            Map<IThirdInterface>().To<MoreComplicatedClassThatCantBeFullySatisfied>();
+            Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>().AsSingleton();
+            Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>() .AsSingleton();
+            Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>().AsSingleton();
         }
     }
 }

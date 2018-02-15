@@ -5,11 +5,11 @@
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
 
-    internal class TypeMap
+    internal class TypeMap : ITypeMap
     {
         private Type InterfaceType { get; }
 
-        public Lifetime Lifetime { get; }
+        public Lifetime Lifetime { get; set;  }
 
         public IConstructorSelectionStrategy ConstructorSelector { get; }
 
@@ -19,10 +19,9 @@
 
         public IEnumerable<Type> Types { get { return InitialisedTypes.Keys; } }
 
-        public TypeMap(Type interfaceType, Lifetime lifetime, IConstructorSelectionStrategy strategy)
+        public TypeMap(Type interfaceType, IConstructorSelectionStrategy strategy = null)
         {
             InterfaceType = interfaceType;
-            Lifetime = lifetime;
             ConstructorSelector = strategy;
         }
 

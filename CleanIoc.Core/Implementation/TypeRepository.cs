@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
-    using CleanIoc.Core.Enums;
     using CleanIoc.Core.Exceptions;
     using CleanIoc.Core.Interfaces;
 
@@ -11,7 +9,7 @@
     {
         private Dictionary<Type, TypeMap> maps = new Dictionary<Type, TypeMap>();
 
-        private Dictionary<Type, TypeConstructionPlan> plans = new Dictionary<Type, TypeConstructionPlan>();
+        private Dictionary<Type, HashSet<TypeConstructionPlan>> allPlans = new Dictionary<Type, HashSet<TypeConstructionPlan>>();
 
         private IConstructorSelectionStrategy ConstructorSelectionStrategy { get; set; }
 
@@ -24,48 +22,43 @@
 
         public void AddRegistryContents(ITypeRegistry registry)
         {
-            foreach (var entry in registry.RegisteredTypes) {
+            foreach (var entry in registry.Registrations) {
                 foreach (var toType in entry.Value) {
-                    AddTypeMapping(entry.Key, toType);
+                    AddRegistration(toType);
                 }
             }
         }
 
-        public void AddTypeMapping(Type from, Type to, Lifetime lifetime = Lifetime.Singleton)
+        public void AddRegistration(ITypeRegistration registration)
         {
-            if (!maps.ContainsKey(from)) {
-                maps[from] = new TypeMap(from, lifetime, ConstructorSelectionStrategy);
+            if(registration == null) {
+                throw new ArgumentNullException($"{nameof(registration)} cannot be null");
             }
-            maps[from].Add(to);
-            if (plans.Count > 0) {
-                plans.Clear();
+            if (!allPlans.ContainsKey(registration.From)) {
+                allPlans[registration.From] = new HashSet<TypeConstructionPlan>();
             }
+
+            allPlans[registration.From].Add(new TypeConstructionPlan(registration, allPlans, ConstructorSelectionStrategy));
         }
 
         public IList<object> GetInstances(Type from)
         {
             var returnVal = new List<object>();
-            TypeMap typemap;
+            HashSet<TypeConstructionPlan> plans;
             try {
-                typemap = maps[from];
+                plans = allPlans[from];
             } catch(KeyNotFoundException ex) {
                 throw new MappingNotFoundException(string.Format("No mapping was found for type {0}", from.FullName), ex);
             }
-            if (typemap.Size > 0) {
-                var types = new List<Type>(typemap.Types);
-                foreach (var type in types) {
-                    if(!plans.ContainsKey(type)) {
-                        plans[type] = new TypeConstructionPlan(from, maps);
-                    }
-                    if(plans[type].CanBeConstructed(with: type)) {
-                        returnVal.Add(plans[type].GetInstance());
-                    }
+            foreach(var plan in plans) {
+                if(plan.CanBeConstructed()) {
+                    returnVal.Add(plan.GetInstance());
                 }
             }
             return returnVal;
         }
 
-        private bool disposedValue = false; // To detect redundant calls
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {

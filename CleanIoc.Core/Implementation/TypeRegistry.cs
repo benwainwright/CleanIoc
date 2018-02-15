@@ -2,19 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
     using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Implementation;
     using CleanIoc.Core.Interfaces;
 
     public abstract class TypeRegistry : ITypeRegistry, IMappable
     {
-        private List<Expression> expressions = new List<Expression>();
+        public IEnumerable<KeyValuePair<Type, List<ITypeRegistration>>> Registrations { get { return types;  } }
 
-        public IEnumerable<KeyValuePair<Type, List<Type>>> RegisteredTypes { get { return types;  } }
+        private Dictionary<Type, List<ITypeRegistration>> types = new Dictionary<Type, List<ITypeRegistration>> ();
 
-        private Type fromType;
-
-        private Dictionary<Type, List<Type>> types = new Dictionary<Type, List<Type>>();
+        private Type lastFromType;
 
         private IConstructorSelectionStrategy Strategy { get; set; }
 
@@ -23,18 +21,20 @@
             Strategy = strategy;
         }
 
-        public IMappable Map<TFrom>(Lifetime lifetime = Lifetime.Singleton)
+        public IMappable Register<TFrom>(Lifetime lifetime = Lifetime.Singleton)
         {
-            fromType = typeof(TFrom);
+            lastFromType = typeof(TFrom);
             return this;
         }
 
-        public void To<TTo>()
+        public ITypeRegistration With<TTo>()
         {
-            if (!types.ContainsKey(fromType)) {
-                types[fromType] = new List<Type>();
+            if (!types.ContainsKey(lastFromType)) {
+                types[lastFromType] = new List<ITypeRegistration>();
             }
-            types[fromType].Add(typeof(TTo));
+            var registration = new TypeRegistration(lastFromType, typeof(TTo));
+            types[lastFromType].Add(registration);
+            return registration;
         }
     }
 }

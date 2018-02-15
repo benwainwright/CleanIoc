@@ -3,12 +3,13 @@
     using System;
     using System.Collections.Generic;    
     using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Implementation;
 
     public interface ITypeRegistry
     {
-        IEnumerable<KeyValuePair<Type, List<Type>>> RegisteredTypes { get; }
+        IEnumerable<KeyValuePair<Type, List<ITypeRegistration>>> Registrations { get; }
 
-        IMappable Map<TFrom>(Lifetime lifetime = Lifetime.Singleton);
+        IMappable Register<TFrom>(Lifetime lifetime = Lifetime.Singleton);
 
         void ConstructorStrategy(IConstructorSelectionStrategy strategy);
     }

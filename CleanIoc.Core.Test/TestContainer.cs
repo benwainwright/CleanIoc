@@ -16,7 +16,7 @@ namespace CleanIoc.Core.Test
         public void TestThatItWorksWithASimpleTypeWithADefaultConstructor()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Map<ISimpleInterface>().To<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
             var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
@@ -30,7 +30,7 @@ namespace CleanIoc.Core.Test
         public void TestThatWithoutSettingALifetimeItIsTransient()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Map<ISimpleInterface>().To<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
             var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
@@ -46,8 +46,8 @@ namespace CleanIoc.Core.Test
         public void TestThatItCanConstructTypesWithASingleRegistredType()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Map<ISimpleInterface>().To<EmptyClassWithDefaultConstructor>();
-            registry.Map<ISecondInterface>().To<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
+            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
             var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
@@ -67,9 +67,9 @@ namespace CleanIoc.Core.Test
         public void TestThrowsAnExceptionIfCantFullySatisfyConstructor()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Map<ISimpleInterface>().To<EmptyClassWithDefaultConstructor>();
-            registry.Map<ISecondInterface>().To<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            registry.Map<IThirdInterface>().To<MoreComplicatedClassThatCantBeFullySatisfied>();
+            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
+            registry.Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>();
             var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;
@@ -87,9 +87,9 @@ namespace CleanIoc.Core.Test
         public void TestExceptionThatIsThrowHasHierarchyInformationIfCantFullySatisfyConstructor()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Map<ISimpleInterface>().To<EmptyClassWithDefaultConstructor>();
-            registry.Map<ISecondInterface>().To<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            registry.Map<IThirdInterface>().To<MoreComplicatedClassThatCantBeFullySatisfied>();
+            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
+            registry.Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>();
             var builder = new ContainerBuilder(Enums.ScanBehaviour.Off);
             builder.AddRegistry(registry);
             var container = builder.Container;

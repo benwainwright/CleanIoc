@@ -12,7 +12,7 @@
     {
         public MySimpleRegistry()
         {
-            Map<IMySimpleSampleInterface>().To<MySimpleClass>();
+            Register<IMySimpleSampleInterface>().With<MySimpleClass>();
         }
     }
 }

@@ -5,18 +5,21 @@
     using System.Linq;
     using System.Reflection;
     using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Interfaces;
 
     internal class TypeConstructionPlan : IInjectedParameter
     {
-        private readonly Dictionary<Type, TypeMap> maps;
-
         public Type Declared { get; }
+
+        private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> plans;
 
         public Type Injected { get; private set; }
 
-        private MultipleMappingsBehaviour MultipleMappingsBehaviour { get; }
+        private List<Type> possibleMappings = new List<Type>();
 
-        private TypeConstructionPlan root;
+        public IEnumerable<Type> PossibleMappings => possibleMappings;
+
+        private MultipleMappingsBehaviour MultipleMappingsBehaviour { get; }
 
         public List<IConstructorAttempt> ConstructorAttempts { get; } = new List<IConstructorAttempt>();
 
@@ -24,57 +27,100 @@
 
         public ConstructionOutcome Outcome { get; private set; }
 
-        public TypeConstructionPlan(Type from, Dictionary<Type, TypeMap> maps, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
+        private readonly IConstructorSelectionStrategy constructorSelector;
+
+        public TypeConstructionPlan(ITypeRegistration registration, Dictionary<Type, HashSet<TypeConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
         {
-            this.maps = maps;
-            this.root = root ?? this;
-            Declared = from;
+            Declared = registration?.From;
+            Injected = registration?.To;
             MultipleMappingsBehaviour = multipleMappingsBehaviour;
+            plans = otherPlans;
+            constructorSelector = selector;
         }
 
-        public bool CanBeConstructed(Type with = null)
+        public bool CanBeConstructed()
         {
             if (Outcome == ConstructionOutcome.Success) {
                 return true;
             }
-            if(!maps.ContainsKey(Declared)) {
+
+            if(!plans.ContainsKey(Declared)) {
                 Outcome = ConstructionOutcome.NoMappingFound;
                 return false;
             }
-            if (maps[Declared].Size > 1 && MultipleMappingsBehaviour == MultipleMappingsBehaviour.FailConstruction) {
+
+            if (plans[Declared].Count > 1 && MultipleMappingsBehaviour == MultipleMappingsBehaviour.FailConstruction) {
                 Outcome = ConstructionOutcome.MultipleMappings;
                 return false;
             }
-            Injected = with != null ? with : maps[Declared].Types.FirstOrDefault();
-            var constructors = Injected.GetConstructors().ToList();
-            ConstructorAttempt attempt;
-            do {
-                var constructor = maps[Declared].ConstructorSelector.SelectConstructor(Declared, constructors);
-                attempt = PlanConstructorExecution(constructor);
-                ConstructorAttempts.Add(attempt);
-            } while (constructors.Count > 0 && !attempt.Success);
 
-            if (attempt.Success) {
-                constructorToUse = attempt;
+            var finalConstructorAttempt = TryConstructorsOf(Injected);
+
+            if (finalConstructorAttempt.Success) {
+                constructorToUse = finalConstructorAttempt;
                 Outcome = ConstructionOutcome.Success;
                 return true;
             } else {
-                Outcome = ConstructionOutcome.MultipleMappings;
+                Outcome = ConstructionOutcome.NoSuitableConstructor;
                 return false;
             }
         }
 
+        private ConstructorAttempt TryConstructorsOf(Type type)
+        {
+            var constructors = Injected.GetConstructors().ToList();
+            ConstructorAttempt attempt;
+            do {
+                var constructor = constructorSelector.SelectConstructor(Declared, constructors);
+                attempt = PlanConstructorExecution(constructor);
+                ConstructorAttempts.Add(attempt);
+            } while (constructors.Count > 0 && !attempt.Success);
+
+            return attempt;
+        }
+         
         private ConstructorAttempt PlanConstructorExecution(ConstructorInfo constructor)
         {
             var parameters = constructor.GetParameters();
             bool success = true;
             var constructionPlans = new List<TypeConstructionPlan>();
             foreach(var parameter in parameters) {
-                var plan = new TypeConstructionPlan(parameter.ParameterType, maps);
-                success = !plan.CanBeConstructed() ? false : success;
-                constructionPlans.Add(plan);
+                var type = parameter.ParameterType;
+                if (plans.ContainsKey(type)) {
+                    var plan = plans[type].FirstOrDefault();
+                    success = !plan.CanBeConstructed() ? false : success;
+                    constructionPlans.Add(plan);
+                } else {
+                    success = false;
+                }                
             }
             return new ConstructorAttempt(Injected, constructionPlans, success);
+        }
+
+        public override bool Equals(object other)
+        {
+            return Equals(other as TypeConstructionPlan);
+        }
+
+        public bool Equals(TypeConstructionPlan other)
+        {
+            if (other == null) {
+                return false;
+            }
+            if (other == this) {
+                return true;
+            }
+
+            return other.Declared == Declared &&
+                   other.Injected == Injected;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked {
+                return Declared.GetHashCode() +
+                       Injected.GetHashCode() * 17;
+            }
         }
 
         public object GetInstance()
