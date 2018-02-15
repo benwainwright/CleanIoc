@@ -76,6 +76,7 @@
     <Compile Include="Implementation\TypeMap.cs" />
     <Compile Include="Implementation\TypeRegistry.cs" />
     <Compile Include="Implementation\TypeRepository.cs" />
+    <Compile Include="Utils\Guard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
