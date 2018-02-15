@@ -76,36 +76,15 @@
             }
         }
 
-        private ConstructorAttempt TryConstructorsOf(Type type)
+        public object GetInstance()
         {
-            var constructors = Injected.GetConstructors().ToList();
-            ConstructorAttempt attempt;
-            do {
-                var constructor = constructorSelector.SelectConstructor(Declared, constructors);
-                attempt = PlanConstructorExecution(constructor);
-                ConstructorAttempts.Add(attempt);
-                constructors.Remove(constructor);
-            } while (constructors.Count > 0 && !attempt.Success);
-
-            return attempt;
-        }
-         
-        private ConstructorAttempt PlanConstructorExecution(ConstructorInfo constructor)
-        {
-            var parameters = constructor.GetParameters();
-            bool success = true;
-            var constructionPlans = new List<TypeConstructionPlan>();
-            foreach(var parameter in parameters) {
-                var type = parameter.ParameterType;
-                if (plans.ContainsKey(type)) {
-                    var plan = plans[type].FirstOrDefault();
-                    success = !plan.CanBeConstructed() ? false : success;
-                    constructionPlans.Add(plan);
-                } else {
-                    success = false;
-                }                
+            if (lifetime == Lifetime.Singleton) {
+                if (instance == null) {
+                    instance = constructorToUse.execute();
+                }
+                return instance;
             }
-            return new ConstructorAttempt(Injected, constructionPlans, success);
+            return constructorToUse.execute();
         }
 
         public override bool Equals(object other)
@@ -134,15 +113,36 @@
             }
         }
 
-        public object GetInstance()
+        private ConstructorAttempt TryConstructorsOf(Type type)
         {
-            if (lifetime == Lifetime.Singleton) {
-                if (instance == null) {
-                    instance = constructorToUse.execute();
+            var constructors = Injected.GetConstructors().ToList();
+            ConstructorAttempt attempt;
+            do {
+                var constructor = constructorSelector.SelectConstructor(Declared, constructors);
+                attempt = PlanConstructorExecution(constructor);
+                ConstructorAttempts.Add(attempt);
+                constructors.Remove(constructor);
+            } while (constructors.Count > 0 && !attempt.Success);
+
+            return attempt;
+        }
+
+        private ConstructorAttempt PlanConstructorExecution(ConstructorInfo constructor)
+        {
+            var parameters = constructor.GetParameters();
+            bool success = true;
+            var constructionPlans = new List<TypeConstructionPlan>();
+            foreach (var parameter in parameters) {
+                var type = parameter.ParameterType;
+                if (plans.ContainsKey(type)) {
+                    var plan = plans[type].FirstOrDefault();
+                    success = !plan.CanBeConstructed() ? false : success;
+                    constructionPlans.Add(plan);
+                } else {
+                    success = false;
                 }
-                return instance;
             }
-            return constructorToUse.execute();
+            return new ConstructorAttempt(Injected, constructionPlans, success);
         }
     }
 }
