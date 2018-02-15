@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
+	<CodeAnalysisRuleSet>../analysis.ruleset</CodeAnalysisRuleSet>  
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -10,10 +10,12 @@
     <PackageReference Include="nunit" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+	<PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />
+	<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="all" />  	
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CleanIoc.Core\CleanIoc.Core.csproj" />
   </ItemGroup>
-
+  
 </Project>
