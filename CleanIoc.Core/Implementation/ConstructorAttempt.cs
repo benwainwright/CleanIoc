@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using CleanIoc.Core.Utils;
+    using CleanIoc.Core.Interfaces;
 
     internal class ConstructorAttempt : IConstructorAttempt, IExecutableConstructor
     {
@@ -25,7 +26,7 @@
             this.type = type;
         }
 
-        public object execute()
+        public object Execute()
         {
             var values = from plan
                          in plans

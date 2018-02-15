@@ -1,8 +1,8 @@
-﻿using System;
-using CleanIoc.Core.Enums;
-
-namespace CleanIoc.Core.Interfaces
+﻿namespace CleanIoc.Core.Interfaces
 {
+    using System;
+    using CleanIoc.Core.Enums;
+
     public interface ITypeRegistration
     {
         Type From { get; }

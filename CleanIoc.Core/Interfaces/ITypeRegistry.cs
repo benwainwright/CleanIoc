@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;    
     using CleanIoc.Core.Enums;
-    using CleanIoc.Core.Implementation;
 
     public interface ITypeRegistry
     {

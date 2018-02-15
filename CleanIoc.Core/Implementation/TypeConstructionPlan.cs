@@ -80,11 +80,11 @@
         {
             if (lifetime == Lifetime.Singleton) {
                 if (instance == null) {
-                    instance = constructorToUse.execute();
+                    instance = constructorToUse.Execute();
                 }
                 return instance;
             }
-            return constructorToUse.execute();
+            return constructorToUse.Execute();
         }
 
         public override bool Equals(object other)

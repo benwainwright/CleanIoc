@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using CleanIoc.Core.Enums;
-using CleanIoc.Core.Interfaces;
-
-namespace CleanIoc.Core.Implementation
+﻿namespace CleanIoc.Core.Interfaces
 {
+    using System;
+    using System.Collections.Generic;
+    using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Interfaces;
+
     public interface ITypeMap
     {
         IConstructorSelectionStrategy ConstructorSelector { get; }

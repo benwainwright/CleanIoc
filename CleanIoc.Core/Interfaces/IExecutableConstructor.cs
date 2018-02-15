@@ -1,7 +1,7 @@
-﻿namespace CleanIoc.Core.Implementation
+﻿namespace CleanIoc.Core.Interfaces
 {
     public interface IExecutableConstructor
     {
-        object execute();
+        object Execute();
     }
 }

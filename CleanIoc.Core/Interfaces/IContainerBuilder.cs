@@ -1,7 +1,5 @@
-﻿namespace CleanIoc.Core
+﻿namespace CleanIoc.Core.Interfaces
 {
-    using CleanIoc.Core.Interfaces;
-
     public interface IContainerBuilder
     {
         void AddRegistry(ITypeRegistry registry);

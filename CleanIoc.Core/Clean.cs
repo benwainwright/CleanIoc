@@ -2,6 +2,7 @@
 {
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Implementation;
+    using CleanIoc.Core.Interfaces;
 
     public static class Clean
     {

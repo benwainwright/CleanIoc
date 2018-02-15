@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using CleanIoc.Core.Implementation;
+    using CleanIoc.Core.Interfaces;
 
     public class UnableToConstructException : CleanIocException
     {
