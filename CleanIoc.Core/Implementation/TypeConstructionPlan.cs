@@ -31,6 +31,8 @@
 
         private readonly Lifetime lifetime;
 
+        private object instance;
+
         public TypeConstructionPlan(ITypeRegistration registration, Dictionary<Type, HashSet<TypeConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
         {
             if(registration == null) {
@@ -80,6 +82,7 @@
                 var constructor = constructorSelector.SelectConstructor(Declared, constructors);
                 attempt = PlanConstructorExecution(constructor);
                 ConstructorAttempts.Add(attempt);
+                constructors.Remove(constructor);
             } while (constructors.Count > 0 && !attempt.Success);
 
             return attempt;
@@ -131,6 +134,12 @@
 
         public object GetInstance()
         {
+            if (lifetime == Lifetime.Singleton) {
+                if (instance == null) {
+                    instance = constructorToUse.execute();
+                }
+                return instance;
+            }
             return constructorToUse.execute();
         }
     }
