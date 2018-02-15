@@ -7,13 +7,13 @@
 
     internal class Container : ICleanIocContainer, IServiceProvider
     {
-        private List<ITypeRegistry> registries;
+        private List<IRegistry> registries;
 
-        private TypeRepository repository = new TypeRepository();
+        private Repository repository = new Repository();
 
         private bool disposed = false;
 
-        internal Container(List<ITypeRegistry> registries)
+        internal Container(List<IRegistry> registries)
         {
             Guard.Against.Null(registries, nameof(registries));
             this.registries = registries;

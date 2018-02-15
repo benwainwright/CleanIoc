@@ -3,7 +3,7 @@
     using CleanIoc.Core.Test.DummyTypes.Concrete;
     using CleanIoc.Core.Test.DummyTypes.Interfaces;
 
-    public class SimpleTypeRegistry : TypeRegistry
+    public class SimpleTypeRegistry : Registry
     {
         public SimpleTypeRegistry()
         {

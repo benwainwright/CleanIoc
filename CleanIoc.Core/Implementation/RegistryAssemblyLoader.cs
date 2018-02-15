@@ -71,7 +71,7 @@
 
         private static bool TypeIsDerivedFromRegistryInterface(Type type)
         {
-            var registryType = typeof(ITypeRegistry);
+            var registryType = typeof(IRegistry);
 
             // So .NET has this weird (in my opinion) design flaw - to inspect assemblies
             // before fully loading them, you need to load them in a 'reflection only'

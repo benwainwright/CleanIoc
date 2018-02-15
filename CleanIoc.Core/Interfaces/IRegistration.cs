@@ -3,7 +3,7 @@
     using System;
     using CleanIoc.Core.Enums;
 
-    public interface ITypeRegistration
+    public interface IRegistration
     {
         Type DefinedType { get; }
 

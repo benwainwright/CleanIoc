@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using CleanIoc.Core.Enums;
 
-    public interface ITypeRegistry
+    public interface IRegistry
     {
-        IEnumerable<KeyValuePair<Type, List<ITypeRegistration>>> Registrations { get; }
+        IEnumerable<KeyValuePair<Type, List<IRegistration>>> Registrations { get; }
 
         IMappable Register<TFrom>(InstanceLifetime lifetime = InstanceLifetime.Singleton);
 

@@ -6,13 +6,13 @@
     using CleanIoc.Core.Implementation;
     using CleanIoc.Core.Interfaces;
 
-    public abstract class TypeRegistry : ITypeRegistry, IMappable
+    public abstract class Registry : IRegistry, IMappable
     {
-        private readonly Dictionary<Type, List<ITypeRegistration>> types = new Dictionary<Type, List<ITypeRegistration>>();
+        private readonly Dictionary<Type, List<IRegistration>> types = new Dictionary<Type, List<IRegistration>>();
 
         private Type lastFromType;
 
-        public IEnumerable<KeyValuePair<Type, List<ITypeRegistration>>> Registrations => types;
+        public IEnumerable<KeyValuePair<Type, List<IRegistration>>> Registrations => types;
 
         private IConstructorSelectionStrategy Strategy { get; set; }
 
@@ -27,13 +27,13 @@
             return this;
         }
 
-        public ITypeRegistration WithConcreteType<TTo>()
+        public IRegistration WithConcreteType<TTo>()
         {
             if (!types.ContainsKey(lastFromType)) {
-                types[lastFromType] = new List<ITypeRegistration>();
+                types[lastFromType] = new List<IRegistration>();
             }
 
-            var registration = new TypeRegistration(lastFromType, typeof(TTo));
+            var registration = new Registration(lastFromType, typeof(TTo));
             types[lastFromType].Add(registration);
             return registration;
         }

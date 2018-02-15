@@ -5,20 +5,20 @@
     using CleanIoc.Core.Exceptions;
     using CleanIoc.Core.Interfaces;
 
-    internal class TypeRepository : ITypeRepository
+    internal class Repository : IRepository
     {
-        private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> allPlans = new Dictionary<Type, HashSet<TypeConstructionPlan>>();
+        private readonly Dictionary<Type, HashSet<ConstructionPlan>> allPlans = new Dictionary<Type, HashSet<ConstructionPlan>>();
 
         private readonly IConstructorSelectionStrategy constructorSelectionStrategy;
 
         private bool disposed = false;
 
-        public TypeRepository(IConstructorSelectionStrategy constructorSelectionStrategy = null)
+        public Repository(IConstructorSelectionStrategy constructorSelectionStrategy = null)
         {
             this.constructorSelectionStrategy = constructorSelectionStrategy ?? new DefaultConstructorSelectionStrategy();
         }
 
-        public void AddRegistryContents(ITypeRegistry registry)
+        public void AddRegistryContents(IRegistry registry)
         {
             foreach (var entry in registry.Registrations) {
                 foreach (var toType in entry.Value) {
@@ -27,24 +27,24 @@
             }
         }
 
-        public void AddRegistration(ITypeRegistration registration)
+        public void AddRegistration(IRegistration registration)
         {
             if (registration == null) {
                 throw new ArgumentNullException($"{nameof(registration)} cannot be null");
             }
 
             if (!allPlans.ContainsKey(registration.DefinedType)) {
-                allPlans[registration.DefinedType] = new HashSet<TypeConstructionPlan>();
+                allPlans[registration.DefinedType] = new HashSet<ConstructionPlan>();
             }
 
-            allPlans[registration.DefinedType].Add(new TypeConstructionPlan(registration, allPlans, constructorSelectionStrategy));
+            allPlans[registration.DefinedType].Add(new ConstructionPlan(registration, allPlans, constructorSelectionStrategy));
         }
 
         public IList<object> GetInstances(Type from, out List<IInjectedType> failed)
         {
             var returnVal = new List<object>();
             failed = new List<IInjectedType>();
-            HashSet<TypeConstructionPlan> plans;
+            HashSet<ConstructionPlan> plans;
             try {
                 plans = allPlans[from];
             } catch (KeyNotFoundException ex) {

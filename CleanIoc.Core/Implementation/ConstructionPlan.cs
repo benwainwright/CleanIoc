@@ -8,9 +8,9 @@
     using CleanIoc.Core.Interfaces;
     using CleanIoc.Core.Utils;
 
-    internal class TypeConstructionPlan : IInjectedType
+    internal class ConstructionPlan : IInjectedType
     {
-        private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> plans;
+        private readonly Dictionary<Type, HashSet<ConstructionPlan>> plans;
 
         private readonly IConstructorSelectionStrategy constructorSelector;
 
@@ -24,7 +24,7 @@
 
         private object instance;
 
-        public TypeConstructionPlan(ITypeRegistration registration, Dictionary<Type, HashSet<TypeConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
+        public ConstructionPlan(IRegistration registration, Dictionary<Type, HashSet<ConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
         {
             Guard.Against.Null(registration, nameof(registration));
             Guard.Against.Null(otherPlans, nameof(otherPlans));
@@ -91,10 +91,10 @@
 
         public override bool Equals(object other)
         {
-            return Equals(other as TypeConstructionPlan);
+            return Equals(other as ConstructionPlan);
         }
 
-        public bool Equals(TypeConstructionPlan other)
+        public bool Equals(ConstructionPlan other)
         {
             if (other == null) {
                 return false;
@@ -133,7 +133,7 @@
         {
             var parameters = constructor.GetParameters();
             bool success = true;
-            var constructionPlans = new List<TypeConstructionPlan>();
+            var constructionPlans = new List<ConstructionPlan>();
             foreach (var parameter in parameters) {
                 var type = parameter.ParameterType;
                 if (plans.ContainsKey(type)) {

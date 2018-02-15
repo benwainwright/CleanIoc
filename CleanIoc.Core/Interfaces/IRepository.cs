@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using CleanIoc.Core.Implementation;
 
-    public interface ITypeRepository : IDisposable
+    public interface IRepository : IDisposable
     {
-        void AddRegistryContents(ITypeRegistry registry);
+        void AddRegistryContents(IRegistry registry);
 
-        void AddRegistration(ITypeRegistration registration);
+        void AddRegistration(IRegistration registration);
 
         IList<object> GetInstances(Type from, out List<IInjectedType> failed);
     }

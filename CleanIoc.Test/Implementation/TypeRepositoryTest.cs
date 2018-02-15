@@ -14,19 +14,19 @@
         [Test]
         public void TestThatTypeRepositoryReturnsNoInstanceAndAFailedPlanIfADependencyCannotBeSatisfied()
         {
-            var repository = new TypeRepository();
+            var repository = new Repository();
 
-            var first = new TypeRegistration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
+            var first = new Registration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
                 Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(first);
 
-            var second = new TypeRegistration(typeof(ISecondInterface), typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)) {
+            var second = new Registration(typeof(ISecondInterface), typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)) {
                 Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(second);
 
-            var third = new TypeRegistration(typeof(IThirdInterface), typeof(MoreComplicatedClassThatCantBeFullySatisfied)) {
+            var third = new Registration(typeof(IThirdInterface), typeof(MoreComplicatedClassThatCantBeFullySatisfied)) {
                 Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(third);
@@ -51,10 +51,10 @@
         [Test]
         public void TestThatTypeRepositoryCorrectlyReturnsInstanceForASimpleTypeRegistrationThatOnlyHasADefaultConstructor()
         {
-            var registration = new TypeRegistration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
+            var registration = new Registration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
                 Lifetime = InstanceLifetime.Singleton
             };
-            var repository = new TypeRepository();
+            var repository = new Repository();
             repository.AddRegistration(registration);
 
             var instances = repository.GetInstances(typeof(ISimpleInterface), out List<IInjectedType> failed);
@@ -67,19 +67,19 @@
         [Test]
         public void TestThatTypeRepositoryCorrectlyReturnsInstanceForATypeRegistrationThatOnlyHasAConstructorWithAsingleEasyDependency()
         {
-            var repository = new TypeRepository();
+            var repository = new Repository();
 
-            var first = new TypeRegistration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
+            var first = new Registration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
                 Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(first);
 
-            var second = new TypeRegistration(typeof(ISecondInterface), typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)) {
+            var second = new Registration(typeof(ISecondInterface), typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)) {
                 Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(second);
 
-            var firstInstances = repository.GetInstances(typeof(ISimpleInterface), out List <IInjectedType> failed);
+            var firstInstances = repository.GetInstances(typeof(ISimpleInterface), out List<IInjectedType> failed);
             Assert.That(firstInstances, Is.Not.Null);
             Assert.That(firstInstances, Has.Count.EqualTo(1));
             Assert.That(firstInstances[0], Is.InstanceOf(typeof(EmptyClassWithDefaultConstructor)));

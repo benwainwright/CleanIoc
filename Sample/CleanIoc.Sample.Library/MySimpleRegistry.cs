@@ -8,7 +8,7 @@
     using CleanIoc.Core;
     using CleanIoc.Sample.Interfaces;
 
-    public class MySimpleRegistry : TypeRegistry
+    public class MySimpleRegistry : Registry
     {
         public MySimpleRegistry()
         {

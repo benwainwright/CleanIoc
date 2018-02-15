@@ -5,9 +5,9 @@
     using CleanIoc.Core.Interfaces;
     using CleanIoc.Core.Utils;
 
-    internal class TypeRegistration : ITypeRegistration
+    internal class Registration : IRegistration
     {
-        public TypeRegistration(Type from, Type to)
+        public Registration(Type from, Type to)
         {
             Guard.Against.Null(from, nameof(from));
             Guard.Against.Null(to, nameof(to));

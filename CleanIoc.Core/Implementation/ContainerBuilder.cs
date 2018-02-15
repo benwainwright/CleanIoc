@@ -9,7 +9,7 @@
     {
         private readonly ScanBehaviour scanBehaviour;
 
-        private readonly List<ITypeRegistry> registries = new List<ITypeRegistry>();
+        private readonly List<IRegistry> registries = new List<IRegistry>();
 
         private readonly List<IAssemblyLoader> loaders = new List<IAssemblyLoader>();
 
@@ -39,7 +39,7 @@
             }
         }
 
-        public void AddRegistry(ITypeRegistry registry)
+        public void AddRegistry(IRegistry registry)
         {
             registries.Add(registry);
         }
@@ -65,17 +65,17 @@
             }
         }
 
-        private static List<ITypeRegistry> GetRegistries()
+        private static List<IRegistry> GetRegistries()
         {
-            var registries = new List<ITypeRegistry>();
-            var registryType = typeof(TypeRegistry);
+            var registries = new List<IRegistry>();
+            var registryType = typeof(Registry);
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             foreach (var assembly in loadedAssemblies) {
                 var types = assembly.GetExportedTypes();
                 foreach (var type in types) {
                     if (registryType.IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface) {
-                        var registry = Activator.CreateInstance(type) as TypeRegistry;
+                        var registry = Activator.CreateInstance(type) as Registry;
                         registries.Add(registry);
                     }
                 }

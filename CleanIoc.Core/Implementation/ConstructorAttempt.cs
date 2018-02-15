@@ -10,9 +10,9 @@
     {
         private Type type;
 
-        private IList<TypeConstructionPlan> plans;
+        private IList<ConstructionPlan> plans;
 
-        public ConstructorAttempt(Type type, List<TypeConstructionPlan> parameters, bool success)
+        public ConstructorAttempt(Type type, List<ConstructionPlan> parameters, bool success)
         {
             Guard.Against.Null(type, nameof(type));
             Guard.Against.Null(parameters, nameof(parameters));
