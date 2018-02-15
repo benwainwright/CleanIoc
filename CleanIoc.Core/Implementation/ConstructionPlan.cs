@@ -78,6 +78,10 @@
 
         public object GetInstance()
         {
+            if (Outcome == ConstructionOutcome.NotCalculated && !CanBeConstructed()) {
+                throw new InvalidOperationException("Cannot return instance - constructin plan was not successful...");
+            }
+
             if (lifetime == InstanceLifetime.Singleton) {
                 if (instance == null) {
                     instance = constructorToUse.Execute();
