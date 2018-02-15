@@ -9,7 +9,7 @@
     {
         IConstructorSelectionStrategy ConstructorSelector { get; }
 
-        Lifetime Lifetime { get; set; }
+        InstanceLifetime Lifetime { get; set; }
 
         int Size { get; }
 

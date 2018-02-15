@@ -4,15 +4,15 @@
     using CleanIoc.Core;
     using CleanIoc.Sample.Interfaces;
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             var builder = Clean.MakeBuilder();
             var container = builder.Container;
-            var instance = container.Get<IMySimpleSampleInterface>();
+            var instance = container.GetInstanceOf<IMySimpleSampleInterface>();
 
-            Console.WriteLine(string.Format("The message is '{0}'", instance.Message));
+            Console.WriteLine($"The message is '{instance.Message}'");
         }
     }
 }

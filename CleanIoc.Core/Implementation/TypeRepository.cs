@@ -7,17 +7,15 @@
 
     internal class TypeRepository : ITypeRepository
     {
-        private Dictionary<Type, TypeMap> maps = new Dictionary<Type, TypeMap>();
+        private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> allPlans = new Dictionary<Type, HashSet<TypeConstructionPlan>>();
 
-        private Dictionary<Type, HashSet<TypeConstructionPlan>> allPlans = new Dictionary<Type, HashSet<TypeConstructionPlan>>();
+        private readonly IConstructorSelectionStrategy constructorSelectionStrategy;
 
-        private IConstructorSelectionStrategy ConstructorSelectionStrategy { get; set; }
+        private bool disposed = false;
 
         public TypeRepository(IConstructorSelectionStrategy constructorSelectionStrategy = null)
         {
-            ConstructorSelectionStrategy = constructorSelectionStrategy != null
-                ? constructorSelectionStrategy
-                : new DefaultConstructorSelectionStrategy();
+            this.constructorSelectionStrategy = constructorSelectionStrategy ?? new DefaultConstructorSelectionStrategy();
         }
 
         public void AddRegistryContents(ITypeRegistry registry)
@@ -31,14 +29,15 @@
 
         public void AddRegistration(ITypeRegistration registration)
         {
-            if(registration == null) {
+            if (registration == null) {
                 throw new ArgumentNullException($"{nameof(registration)} cannot be null");
             }
-            if (!allPlans.ContainsKey(registration.From)) {
-                allPlans[registration.From] = new HashSet<TypeConstructionPlan>();
+
+            if (!allPlans.ContainsKey(registration.DefinedType)) {
+                allPlans[registration.DefinedType] = new HashSet<TypeConstructionPlan>();
             }
 
-            allPlans[registration.From].Add(new TypeConstructionPlan(registration, allPlans, ConstructorSelectionStrategy));
+            allPlans[registration.DefinedType].Add(new TypeConstructionPlan(registration, allPlans, constructorSelectionStrategy));
         }
 
         public IList<object> GetInstances(Type from, out List<IInjectedType> failed)
@@ -48,34 +47,36 @@
             HashSet<TypeConstructionPlan> plans;
             try {
                 plans = allPlans[from];
-            } catch(KeyNotFoundException ex) {
-                throw new MappingNotFoundException(string.Format("No mapping was found for type {0}", from.FullName), ex);
+            } catch (KeyNotFoundException ex) {
+                throw new MappingNotFoundException($"No mapping was found for type {from.FullName}", ex);
             }
-            foreach(var plan in plans) {
-                if(plan.CanBeConstructed()) {
+
+            foreach (var plan in plans) {
+                if (plan.CanBeConstructed()) {
                     returnVal.Add(plan.GetInstance());
                 } else {
                     failed.Add(plan);
                 }
             }
+
             return returnVal;
-        }
-
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue) {
-                if (disposing) {
-                }
-
-                disposedValue = true;
-            }
         }
 
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // TODO - dispose of disposable singletons
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed) {
+                if (disposing) {
+                }
+
+                disposed = true;
+            }
         }
     }
 }

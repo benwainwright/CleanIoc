@@ -4,6 +4,6 @@
 
     public class MySimpleClass : IMySimpleSampleInterface
     {
-        public string Message { get { return "Hello!";  } }
+        public string Message => "Hello!";
     }
 }

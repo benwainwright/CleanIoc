@@ -9,15 +9,18 @@
         {
         }
 
-        public CleanIocException(string message) : base(message)
+        public CleanIocException(string message)
+            : base(message)
         {
         }
 
-        public CleanIocException(string message, Exception innerException) : base(message, innerException)
+        public CleanIocException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
-        protected CleanIocException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected CleanIocException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

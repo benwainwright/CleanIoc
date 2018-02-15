@@ -10,29 +10,19 @@
 
     internal class TypeConstructionPlan : IInjectedType
     {
-        private MultipleMappingsBehaviour MultipleMappingsBehaviour { get; }
+        private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> plans;
 
         private readonly IConstructorSelectionStrategy constructorSelector;
 
-        private readonly Lifetime lifetime;
+        private readonly MultipleMappingsBehaviour multipleMappingsBehaviour;
 
-        private object instance;
-
-        public Type Declared { get; }
-
-        private readonly Dictionary<Type, HashSet<TypeConstructionPlan>> plans;
-
-        public Type Injected { get; private set; }
+        private readonly InstanceLifetime lifetime;
 
         private List<Type> possibleMappings = new List<Type>();
 
-        public IEnumerable<Type> PossibleMappings => possibleMappings;
-
-        public List<IConstructorAttempt> ConstructorAttempts { get; } = new List<IConstructorAttempt>();
-
         private IExecutableConstructor constructorToUse;
 
-        public ConstructionOutcome Outcome { get; private set; }
+        private object instance;
 
         public TypeConstructionPlan(ITypeRegistration registration, Dictionary<Type, HashSet<TypeConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
         {
@@ -40,13 +30,23 @@
             Guard.Against.Null(otherPlans, nameof(otherPlans));
             Guard.Against.Null(selector, nameof(selector));
 
-            Declared = registration.From;
-            Injected = registration.To;
-            MultipleMappingsBehaviour = multipleMappingsBehaviour;
+            Declared = registration.DefinedType;
+            Injected = registration.InjectedType;
+            this.multipleMappingsBehaviour = multipleMappingsBehaviour;
             plans = otherPlans;
             constructorSelector = selector;
             lifetime = registration.Lifetime;
         }
+
+        public Type Declared { get; }
+
+        public Type Injected { get; private set; }
+
+        public IEnumerable<Type> PossibleMappings => possibleMappings;
+
+        public List<IConstructorAttempt> ConstructorAttempts { get; } = new List<IConstructorAttempt>();
+
+        public ConstructionOutcome Outcome { get; private set; }
 
         public bool CanBeConstructed()
         {
@@ -54,12 +54,12 @@
                 return true;
             }
 
-            if(!plans.ContainsKey(Declared)) {
+            if (!plans.ContainsKey(Declared)) {
                 Outcome = ConstructionOutcome.NoMappingFound;
                 return false;
             }
 
-            if (plans[Declared].Count > 1 && MultipleMappingsBehaviour == MultipleMappingsBehaviour.FailConstruction) {
+            if (plans[Declared].Count > 1 && multipleMappingsBehaviour == MultipleMappingsBehaviour.FailConstruction) {
                 Outcome = ConstructionOutcome.MultipleMappings;
                 return false;
             }
@@ -78,12 +78,14 @@
 
         public object GetInstance()
         {
-            if (lifetime == Lifetime.Singleton) {
+            if (lifetime == InstanceLifetime.Singleton) {
                 if (instance == null) {
                     instance = constructorToUse.Execute();
                 }
+
                 return instance;
             }
+
             return constructorToUse.Execute();
         }
 
@@ -97,6 +99,7 @@
             if (other == null) {
                 return false;
             }
+
             if (other == this) {
                 return true;
             }
@@ -108,14 +111,13 @@
         public override int GetHashCode()
         {
             unchecked {
-                return Declared.GetHashCode() +
-                       Injected.GetHashCode() * 17;
+                return Declared.GetHashCode() + (Injected.GetHashCode() * 17);
             }
         }
 
         private ConstructorAttempt TryConstructorsOf(Type type)
         {
-            var constructors = Injected.GetConstructors().ToList();
+            var constructors = type.GetConstructors().ToList();
             ConstructorAttempt attempt;
             do {
                 var constructor = constructorSelector.SelectConstructor(Declared, constructors);
@@ -142,6 +144,7 @@
                     success = false;
                 }
             }
+
             return new ConstructorAttempt(Injected, constructionPlans, success);
         }
     }

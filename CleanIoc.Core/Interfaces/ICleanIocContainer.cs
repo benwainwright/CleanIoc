@@ -5,10 +5,12 @@
 
     public interface ICleanIocContainer : IDisposable
     {
-        T Get<T>() where T : class;
-
-        IList<T> GetAll<T>() where T : class;
-
         IServiceProvider ServiceProvider { get; }
+
+        T GetInstanceOf<T>()
+            where T : class;
+
+        IList<T> GetAll<T>()
+            where T : class;
     }
 }

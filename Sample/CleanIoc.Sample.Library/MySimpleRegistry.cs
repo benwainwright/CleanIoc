@@ -12,7 +12,7 @@
     {
         public MySimpleRegistry()
         {
-            Register<IMySimpleSampleInterface>().With<MySimpleClass>();
+            Register<IMySimpleSampleInterface>().WithConcreteType<MySimpleClass>();
         }
     }
 }

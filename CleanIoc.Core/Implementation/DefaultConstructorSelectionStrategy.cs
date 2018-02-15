@@ -11,13 +11,14 @@
         {
             int max = -1;
             ConstructorInfo returnVal = null;
-            foreach(var constructor in remainingConstructors) {
+            foreach (var constructor in remainingConstructors) {
                 var paramaters = constructor.GetParameters();
                 if (paramaters.Length > max) {
                     returnVal = constructor;
                     max = paramaters.Length;
                 }
             }
+
             return returnVal;
         }
     }

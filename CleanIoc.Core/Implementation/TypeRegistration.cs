@@ -7,29 +7,29 @@
 
     internal class TypeRegistration : ITypeRegistration
     {
-        public Type From { get; }
-
-        public Type To { get; }
-
-        public Lifetime Lifetime { get; set; } = Lifetime.Transient;
-
         public TypeRegistration(Type from, Type to)
         {
             Guard.Against.Null(from, nameof(from));
             Guard.Against.Null(to, nameof(to));
 
-            From = from;
-            To = to;
+            DefinedType = from;
+            InjectedType = to;
         }
+
+        public Type DefinedType { get; }
+
+        public Type InjectedType { get; }
+
+        public InstanceLifetime Lifetime { get; set; } = InstanceLifetime.Transient;
 
         public void AsSingleton()
         {
-            Lifetime = Lifetime.Singleton;
+            Lifetime = InstanceLifetime.Singleton;
         }
 
         public void AsTransient()
         {
-            Lifetime = Lifetime.Transient;
+            Lifetime = InstanceLifetime.Transient;
         }
     }
 }

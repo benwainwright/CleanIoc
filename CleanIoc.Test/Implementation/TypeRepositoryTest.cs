@@ -1,42 +1,35 @@
-﻿using CleanIoc.Core.Enums;
-using CleanIoc.Core.Exceptions;
-using CleanIoc.Core.Implementation;
-using CleanIoc.Core.Interfaces;
-using CleanIoc.Core.Test.DummyTypes.Concrete;
-using CleanIoc.Core.Test.DummyTypes.Interfaces;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CleanIoc.Core.Test.Implementation
+﻿namespace CleanIoc.Core.Test.Implementation
 {
+    using System.Collections.Generic;
+    using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Implementation;
+    using CleanIoc.Core.Interfaces;
+    using CleanIoc.Core.Test.DummyTypes.Concrete;
+    using CleanIoc.Core.Test.DummyTypes.Interfaces;
+    using NUnit.Framework;
+
     [TestFixture]
     public class TypeRepositoryTest
     {
-
         [Test]
         public void TestThatTypeRepositoryReturnsNoInstanceAndAFailedPlanIfADependencyCannotBeSatisfied()
         {
             var repository = new TypeRepository();
 
             var first = new TypeRegistration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
-                Lifetime = Lifetime.Singleton
+                Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(first);
 
             var second = new TypeRegistration(typeof(ISecondInterface), typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)) {
-                Lifetime = Lifetime.Singleton
+                Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(second);
 
             var third = new TypeRegistration(typeof(IThirdInterface), typeof(MoreComplicatedClassThatCantBeFullySatisfied)) {
-                Lifetime = Lifetime.Singleton
+                Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(third);
-
 
             var firstInstances = repository.GetInstances(typeof(ISimpleInterface), out List<IInjectedType> failed);
             Assert.That(firstInstances, Is.Not.Null);
@@ -59,7 +52,7 @@ namespace CleanIoc.Core.Test.Implementation
         public void TestThatTypeRepositoryCorrectlyReturnsInstanceForASimpleTypeRegistrationThatOnlyHasADefaultConstructor()
         {
             var registration = new TypeRegistration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
-                Lifetime = Lifetime.Singleton
+                Lifetime = InstanceLifetime.Singleton
             };
             var repository = new TypeRepository();
             repository.AddRegistration(registration);
@@ -77,15 +70,15 @@ namespace CleanIoc.Core.Test.Implementation
             var repository = new TypeRepository();
 
             var first = new TypeRegistration(typeof(ISimpleInterface), typeof(EmptyClassWithDefaultConstructor)) {
-                Lifetime = Lifetime.Singleton
+                Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(first);
 
             var second = new TypeRegistration(typeof(ISecondInterface), typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)) {
-                Lifetime = Lifetime.Singleton
+                Lifetime = InstanceLifetime.Singleton
             };
             repository.AddRegistration(second);
-            
+
             var firstInstances = repository.GetInstances(typeof(ISimpleInterface), out List <IInjectedType> failed);
             Assert.That(firstInstances, Is.Not.Null);
             Assert.That(firstInstances, Has.Count.EqualTo(1));

@@ -2,6 +2,6 @@
 {
     public interface IMappable
     {
-        ITypeRegistration With<TTo>();
+        ITypeRegistration WithConcreteType<TTo>();
     }
 }

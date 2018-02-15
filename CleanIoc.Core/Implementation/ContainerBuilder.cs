@@ -5,15 +5,22 @@
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
 
-    internal class ContainerBuilder : IContainerBuilder
+    internal class ContainerBuilder : IContainerBuilder, IDisposable
     {
-        private List<ITypeRegistry> Registries { get; } = new List<ITypeRegistry>();
-
-        private List<IAssemblyLoader> Loaders { get; } = new List<IAssemblyLoader>();
-
         private readonly ScanBehaviour scanBehaviour;
 
+        private readonly List<ITypeRegistry> registries = new List<ITypeRegistry>();
+
+        private readonly List<IAssemblyLoader> loaders = new List<IAssemblyLoader>();
+
+        private bool disposed = false;
+
         private ICleanIocContainer container;
+
+        public ContainerBuilder(ScanBehaviour scanBehaviour = ScanBehaviour.ScanLoadedAssembliesForRegistries)
+        {
+            this.scanBehaviour = scanBehaviour;
+        }
 
         public ICleanIocContainer Container
         {
@@ -22,36 +29,49 @@
                 if (container == null) {
                     LoadAssemblies();
                     if (scanBehaviour != ScanBehaviour.Off) {
-                        Registries.AddRange(GetRegistries());
+                        registries.AddRange(GetRegistries());
                     }
-                    container = new Container(Registries);
+
+                    container = new Container(registries);
                 }
+
                 return container;
             }
         }
 
-        public ContainerBuilder(ScanBehaviour scanBehaviour = ScanBehaviour.ScanLoadedAssembliesForRegistries)
+        public void AddRegistry(ITypeRegistry registry)
         {
-            this.scanBehaviour = scanBehaviour;
+            registries.Add(registry);
         }
 
-        private void LoadAssemblies()
+        public void AddAssemblyLoader(IAssemblyLoader loader)
         {
-            if (Loaders.Count == 0) {
-                Loaders.Add(new RegistryAssemblyLoader());
-            }
-            foreach(var loader in Loaders) {
-                loader.Load();
+            loaders.Add(loader);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed) {
+                if (disposing) {
+                }
+
+                disposed = true;
             }
         }
 
-        private List<ITypeRegistry> GetRegistries()
+        private static List<ITypeRegistry> GetRegistries()
         {
             var registries = new List<ITypeRegistry>();
             var registryType = typeof(TypeRegistry);
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            foreach(var assembly in loadedAssemblies) {
+            foreach (var assembly in loadedAssemblies) {
                 var types = assembly.GetExportedTypes();
                 foreach (var type in types) {
                     if (registryType.IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface) {
@@ -60,17 +80,19 @@
                     }
                 }
             }
+
             return registries;
         }
 
-        public void AddRegistry(ITypeRegistry registry)
+        private void LoadAssemblies()
         {
-            Registries.Add(registry);
-        }
+            if (loaders.Count == 0) {
+                loaders.Add(new RegistryAssemblyLoader());
+            }
 
-        public void AddAssemblyLoader(IAssemblyLoader loader)
-        {
-            Loaders.Add(loader);
+            foreach (var loader in loaders) {
+                loader.Load();
+            }
         }
     }
 }

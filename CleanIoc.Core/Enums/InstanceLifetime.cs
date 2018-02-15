@@ -1,9 +1,11 @@
 ﻿namespace CleanIoc.Core.Enums
 {
-    public enum Lifetime
+    public enum InstanceLifetime
     {
         None,
+
         Singleton,
+
         Transient
     }
 }

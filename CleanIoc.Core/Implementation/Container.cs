@@ -7,26 +7,21 @@
 
     internal class Container : ICleanIocContainer, IServiceProvider
     {
-        public bool Initialised { get; private set; } = false;
+        private List<ITypeRegistry> registries;
 
-        private List<ITypeRegistry> Registries { get; set; }
+        private TypeRepository repository = new TypeRepository();
 
-        private TypeRepository Repository { get; set; } = new TypeRepository();
-
-        public IServiceProvider ServiceProvider { get { return this;  } }
+        private bool disposed = false;
 
         internal Container(List<ITypeRegistry> registries)
         {
             Guard.Against.Null(registries, nameof(registries));
-            Registries = registries;
+            this.registries = registries;
         }
 
-        private void Initialise()
-        {
-            foreach (var registry in Registries) {
-                Repository.AddRegistryContents(registry);
-            }
-        }
+        public IServiceProvider ServiceProvider => this;
+
+        public bool Initialised { get; private set; } = false;
 
         public object GetService(Type from)
         {
@@ -34,16 +29,18 @@
             if (instances.Count == 0) {
                 return null;
             }
+
             return instances[0];
         }
 
-        public T Get<T>()
+        public T GetInstanceOf<T>()
             where T : class
         {
             var returnVal = GetAll<T>();
-            if(returnVal.Count == 0) {
+            if (returnVal.Count == 0) {
                 return null;
             }
+
             return returnVal[0];
         }
 
@@ -53,10 +50,28 @@
             Type from = typeof(T);
             var returnVal = new List<T>();
             var instances = InitialiseAndGetInstances(from);
-            foreach(object instance in instances) {
+            foreach (object instance in instances) {
                 returnVal.Add(instance as T);
             }
+
             return returnVal;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed) {
+                if (disposing) {
+                    repository.Dispose();
+                }
+
+                disposed = true;
+            }
         }
 
         private IList<object> InitialiseAndGetInstances(Type from)
@@ -65,24 +80,15 @@
                 Initialise();
                 Initialised = true;
             }
-            return Repository.GetInstances(from, out List<IInjectedType> failed);
+
+            return repository.GetInstances(from, out List<IInjectedType> failed);
         }
 
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
+        private void Initialise()
         {
-            if (!disposedValue) {
-                if (disposing) {
-                    Repository.Dispose();
-                }
-                disposedValue = true;
+            foreach (var registry in registries) {
+                repository.AddRegistryContents(registry);
             }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
     }
 }

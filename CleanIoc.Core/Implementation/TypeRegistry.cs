@@ -8,11 +8,11 @@
 
     public abstract class TypeRegistry : ITypeRegistry, IMappable
     {
-        public IEnumerable<KeyValuePair<Type, List<ITypeRegistration>>> Registrations { get { return types;  } }
-
-        private Dictionary<Type, List<ITypeRegistration>> types = new Dictionary<Type, List<ITypeRegistration>> ();
+        private readonly Dictionary<Type, List<ITypeRegistration>> types = new Dictionary<Type, List<ITypeRegistration>>();
 
         private Type lastFromType;
+
+        public IEnumerable<KeyValuePair<Type, List<ITypeRegistration>>> Registrations => types;
 
         private IConstructorSelectionStrategy Strategy { get; set; }
 
@@ -21,17 +21,18 @@
             Strategy = strategy;
         }
 
-        public IMappable Register<TFrom>(Lifetime lifetime = Lifetime.Singleton)
+        public IMappable Register<TFrom>(InstanceLifetime lifetime = InstanceLifetime.Singleton)
         {
             lastFromType = typeof(TFrom);
             return this;
         }
 
-        public ITypeRegistration With<TTo>()
+        public ITypeRegistration WithConcreteType<TTo>()
         {
             if (!types.ContainsKey(lastFromType)) {
                 types[lastFromType] = new List<ITypeRegistration>();
             }
+
             var registration = new TypeRegistration(lastFromType, typeof(TTo));
             types[lastFromType].Add(registration);
             return registration;

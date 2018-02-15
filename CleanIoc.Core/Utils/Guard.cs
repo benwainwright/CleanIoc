@@ -8,7 +8,7 @@
         {
             public static void Null(object value, string argument)
             {
-                if(argument == null){
+                if (value == null) {
                     throw new ArgumentNullException($"{argument} cannot be null!");
                 }
             }

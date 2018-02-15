@@ -2,9 +2,9 @@
 {
     public interface IContainerBuilder
     {
-        void AddRegistry(ITypeRegistry registry);
-
         ICleanIocContainer Container { get; }
+
+        void AddRegistry(ITypeRegistry registry);
 
         void AddAssemblyLoader(IAssemblyLoader loader);
     }

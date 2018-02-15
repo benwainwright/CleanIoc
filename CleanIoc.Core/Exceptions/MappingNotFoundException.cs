@@ -9,15 +9,18 @@
         {
         }
 
-        public MappingNotFoundException(string message) : base(message)
+        public MappingNotFoundException(string message)
+            : base(message)
         {
         }
 
-        public MappingNotFoundException(string message, Exception innerException) : base(message, innerException)
+        public MappingNotFoundException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
 
-        protected MappingNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected MappingNotFoundException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

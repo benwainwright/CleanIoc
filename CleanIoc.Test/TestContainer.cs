@@ -1,14 +1,13 @@
-﻿using System.Linq;
-using CleanIoc.Core.Enums;
-using CleanIoc.Core.Exceptions;
-using CleanIoc.Core.Implementation;
-using CleanIoc.Core.Test.DummyTypes.Concrete;
-using CleanIoc.Core.Test.DummyTypes.Interfaces;
-using CleanIoc.Core.Test.DummyTypes.Registries;
-using NUnit.Framework;
-
-namespace CleanIoc.Core.Test
+﻿namespace CleanIoc.Core.Test
 {
+    using System.Linq;
+    using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Exceptions;
+    using CleanIoc.Core.Test.DummyTypes.Concrete;
+    using CleanIoc.Core.Test.DummyTypes.Interfaces;
+    using CleanIoc.Core.Test.DummyTypes.Registries;
+    using NUnit.Framework;
+
     [TestFixture]
     public class TestContainer
     {
@@ -16,12 +15,12 @@ namespace CleanIoc.Core.Test
         public void TestThatItWorksWithASimpleTypeWithADefaultConstructor()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISimpleInterface>().WithConcreteType<EmptyClassWithDefaultConstructor>();
             var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
-            var instance = container.Get<ISimpleInterface>();
+            var instance = container.GetInstanceOf<ISimpleInterface>();
             Assert.That(instance, Is.Not.Null);
             Assert.That(instance, Is.TypeOf<EmptyClassWithDefaultConstructor>());
         }
@@ -30,13 +29,13 @@ namespace CleanIoc.Core.Test
         public void TestThatWithoutSettingALifetimeItIsTransient()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISimpleInterface>().WithConcreteType<EmptyClassWithDefaultConstructor>();
             var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
-            var first = container.Get<ISimpleInterface>();
-            var second = container.Get<ISimpleInterface>();
+            var first = container.GetInstanceOf<ISimpleInterface>();
+            var second = container.GetInstanceOf<ISimpleInterface>();
             Assert.That(first, Is.Not.Null);
             Assert.That(second, Is.Not.Null);
             Assert.That(first, Is.Not.SameAs(second));
@@ -46,17 +45,17 @@ namespace CleanIoc.Core.Test
         public void TestThatItCanConstructTypesWithASingleRegistredType()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
-            registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
+            registry.Register<ISimpleInterface>().WithConcreteType<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISecondInterface>().WithConcreteType<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
             var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
-            var first = container.Get<ISimpleInterface>();
+            var first = container.GetInstanceOf<ISimpleInterface>();
             Assert.That(first, Is.Not.Null);
             Assert.That(first, Is.TypeOf<EmptyClassWithDefaultConstructor>());
 
-            var second = container.Get<ISecondInterface>();
+            var second = container.GetInstanceOf<ISecondInterface>();
             Assert.That(second, Is.Not.Null);
             Assert.That(second, Is.TypeOf<EmptyClassWithThatOneSimpleObjectInItsConstructor>());
             Assert.That(second.FirstParam, Is.Not.Null);
@@ -67,46 +66,46 @@ namespace CleanIoc.Core.Test
         public void TestThrowsAnExceptionIfCantFullySatisfyConstructor()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
-            registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            registry.Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>();
+            registry.Register<ISimpleInterface>().WithConcreteType<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISecondInterface>().WithConcreteType<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
+            registry.Register<IThirdInterface>().WithConcreteType<MoreComplicatedClassThatCantBeFullySatisfied>();
             var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
-            var first = container.Get<ISimpleInterface>();
+            var first = container.GetInstanceOf<ISimpleInterface>();
             Assert.That(first, Is.Not.Null);
 
-            var second = container.Get<ISecondInterface>();
+            var second = container.GetInstanceOf<ISecondInterface>();
             Assert.That(second, Is.Not.Null);
 
-            Assert.That(() => container.Get<IThirdInterface>(), Throws.InstanceOf<UnableToConstructException>());
+            Assert.That(() => container.GetInstanceOf<IThirdInterface>(), Throws.InstanceOf<UnableToConstructException>());
         }
 
         [Test]
         public void TestExceptionThatIsThrowHasHierarchyInformationIfCantFullySatisfyConstructor()
         {
             var registry = new SimpleTypeRegistry();
-            registry.Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>();
-            registry.Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
-            registry.Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>();
+            registry.Register<ISimpleInterface>().WithConcreteType<EmptyClassWithDefaultConstructor>();
+            registry.Register<ISecondInterface>().WithConcreteType<EmptyClassWithThatOneSimpleObjectInItsConstructor>();
+            registry.Register<IThirdInterface>().WithConcreteType<MoreComplicatedClassThatCantBeFullySatisfied>();
             var builder = Clean.MakeBuilder();
             builder.AddRegistry(registry);
             var container = builder.Container;
 
-            var first = container.Get<ISimpleInterface>();
+            var first = container.GetInstanceOf<ISimpleInterface>();
             Assert.That(first, Is.Not.Null);
 
-            var second = container.Get<ISecondInterface>();
+            var second = container.GetInstanceOf<ISecondInterface>();
             Assert.That(second, Is.Not.Null);
 
             try {
-                container.Get<IThirdInterface>();
+                container.GetInstanceOf<IThirdInterface>();
             } catch (UnableToConstructException ex) {
                 Assert.That(ex.AttemptedConstructors, Is.Not.Null);
                 Assert.That(ex.AttemptedConstructors, Has.Count.EqualTo(1));
 
-                Assert.That(ex.AttemptedConstructors[0].Parameters, Is.Not.Null);            
+                Assert.That(ex.AttemptedConstructors[0].Parameters, Is.Not.Null);
                 Assert.That(ex.AttemptedConstructors[0].Parameters, Has.Count.EqualTo(2));
                 Assert.That(ex.AttemptedConstructors[0].Success, Is.Not.True);
 
@@ -115,7 +114,7 @@ namespace CleanIoc.Core.Test
 
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].Outcome, Is.EqualTo(ConstructionOutcome.Success));
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].Injected, Is.EqualTo(typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)));
-                Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].Declared, Is.EqualTo(typeof(ISecondInterface)));           
+                Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].Declared, Is.EqualTo(typeof(ISecondInterface)));
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].ConstructorAttempts[0].Parameters, Is.Not.Null);
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].ConstructorAttempts[0].Parameters, Has.Count.EqualTo(1));
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[0].ConstructorAttempts[0].Success, Is.EqualTo(ConstructionOutcome.Success));
@@ -132,10 +131,8 @@ namespace CleanIoc.Core.Test
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[1].Injected, Is.Null);
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[1].Declared, Is.EqualTo(typeof(IFourthInterfaceActuallyDoesntHaveAnyDerivedClasses)));
                 Assert.That(ex.AttemptedConstructors[0].Parameters.ToList()[1].Outcome, Is.EqualTo(ConstructionOutcome.NoMappingFound));
-
             }
         }
-
 
         [Test]
         public void TestRegistryIsFoundAutomatically()
@@ -143,10 +140,10 @@ namespace CleanIoc.Core.Test
             var builder = Clean.MakeBuilder();
             var container = builder.Container;
 
-            var first = container.Get<ISimpleInterface>();
+            var first = container.GetInstanceOf<ISimpleInterface>();
             Assert.That(first, Is.Not.Null);
 
-            var second = container.Get<ISecondInterface>();
+            var second = container.GetInstanceOf<ISecondInterface>();
             Assert.That(second, Is.Not.Null);
         }
     }

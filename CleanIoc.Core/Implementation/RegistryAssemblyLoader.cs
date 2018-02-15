@@ -7,8 +7,7 @@
     using CleanIoc.Core.Interfaces;
 
     // TODO - Fix the loader for .net core
-
-    internal class RegistryAssemblyLoader : IAssemblyLoader, IDisposable
+    internal class RegistryAssemblyLoader : IAssemblyLoader
     {
         public void Load()
         {
@@ -18,7 +17,7 @@
             var domain = AppDomain.CurrentDomain;
 
             domain.Setu
-            
+
             var domainSetup = domain.SetupInformation;
 
             if(!domainSetup.DisallowApplicationBaseProbing) {
@@ -34,18 +33,13 @@
             */
         }
 
-        private Assembly AppDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return Assembly.ReflectionOnlyLoad(args.Name);
-        }
-
-        private List<string> GetNotLoadedAssemblyNames(string dir)
+        private static List<string> GetNotLoadedAssemblyNames(string dir)
         {
             var names = new List<string>();
             var currentlyLoadedAssemblies = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
             var files = Directory.EnumerateFiles(dir);
 
-            foreach(string file in files) {
+            foreach (string file in files) {
                 var parts = file.Split('.');
                 if (parts.Length > 0 && parts[parts.Length - 1].Equals("dll", StringComparison.InvariantCultureIgnoreCase)) {
                     string name = AssemblyName.GetAssemblyName(file).FullName;
@@ -54,24 +48,31 @@
                     }
                 }
             }
+
             return names;
         }
 
-        private void LoadAssembliesContainingRegistries(List<string> names)
+        private static Assembly AppDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            foreach(string name in names) {
+            return Assembly.ReflectionOnlyLoad(args.Name);
+        }
+
+        private static void LoadAssembliesContainingRegistries(List<string> names)
+        {
+            foreach (string name in names) {
                 var assembly = Assembly.ReflectionOnlyLoad(name);
-                foreach(var type in assembly.GetExportedTypes()) {
-                    if(TypeIsDerivedFromRegistryInterface(type)) {
+                foreach (var type in assembly.GetExportedTypes()) {
+                    if (TypeIsDerivedFromRegistryInterface(type)) {
                         Assembly.Load(name);
                     }
                 }
             }
         }
 
-        private bool TypeIsDerivedFromRegistryInterface(Type type)
+        private static bool TypeIsDerivedFromRegistryInterface(Type type)
         {
             var registryType = typeof(ITypeRegistry);
+
             // So .NET has this weird (in my opinion) design flaw - to inspect assemblies
             // before fully loading them, you need to load them in a 'reflection only'
             // context... except if you do this, the reflection 'Type' objects are instances
@@ -81,27 +82,12 @@
             //
             // :-(
             foreach (var theInterface in type.GetInterfaces()) {
-                if(theInterface.AssemblyQualifiedName.Equals(registryType.AssemblyQualifiedName, StringComparison.InvariantCultureIgnoreCase)) {
+                if (theInterface.AssemblyQualifiedName.Equals(registryType.AssemblyQualifiedName, StringComparison.InvariantCultureIgnoreCase)) {
                     return true;
                 }
             }
+
             return false;
-        }
-
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue) {
-                if (disposing) {
-                    AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= AppDomain_ReflectionOnlyAssemblyResolve;
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
     }
 }

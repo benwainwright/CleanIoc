@@ -1,20 +1,16 @@
 ﻿namespace CleanIoc.Core.Implementation
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
-    using CleanIoc.Core.Utils;
+    using System.Linq;
     using CleanIoc.Core.Interfaces;
+    using CleanIoc.Core.Utils;
 
     internal class ConstructorAttempt : IConstructorAttempt, IExecutableConstructor
     {
-        public IEnumerable<IInjectedType> Parameters => plans;
+        private Type type;
 
         private IList<TypeConstructionPlan> plans;
-
-        public bool Success { get; }
-
-        private Type type;
 
         public ConstructorAttempt(Type type, List<TypeConstructionPlan> parameters, bool success)
         {
@@ -25,6 +21,10 @@
             Success = success;
             this.type = type;
         }
+
+        public IEnumerable<IInjectedType> Parameters => plans;
+
+        public bool Success { get; }
 
         public object Execute()
         {

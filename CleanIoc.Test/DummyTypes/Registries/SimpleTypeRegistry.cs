@@ -1,15 +1,15 @@
-﻿using CleanIoc.Core.Test.DummyTypes.Concrete;
-using CleanIoc.Core.Test.DummyTypes.Interfaces;
-
-namespace CleanIoc.Core.Test.DummyTypes.Registries
+﻿namespace CleanIoc.Core.Test.DummyTypes.Registries
 {
+    using CleanIoc.Core.Test.DummyTypes.Concrete;
+    using CleanIoc.Core.Test.DummyTypes.Interfaces;
+
     public class SimpleTypeRegistry : TypeRegistry
     {
         public SimpleTypeRegistry()
         {
-            Register<ISimpleInterface>().With<EmptyClassWithDefaultConstructor>().AsSingleton();
-            Register<ISecondInterface>().With<EmptyClassWithThatOneSimpleObjectInItsConstructor>() .AsSingleton();
-            Register<IThirdInterface>().With<MoreComplicatedClassThatCantBeFullySatisfied>().AsSingleton();
+            Register<ISimpleInterface>().WithConcreteType<EmptyClassWithDefaultConstructor>().AsSingleton();
+            Register<ISecondInterface>().WithConcreteType<EmptyClassWithThatOneSimpleObjectInItsConstructor>().AsSingleton();
+            Register<IThirdInterface>().WithConcreteType<MoreComplicatedClassThatCantBeFullySatisfied>().AsSingleton();
         }
     }
 }

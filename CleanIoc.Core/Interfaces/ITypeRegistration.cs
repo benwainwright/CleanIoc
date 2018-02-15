@@ -5,11 +5,11 @@
 
     public interface ITypeRegistration
     {
-        Type From { get; }
+        Type DefinedType { get; }
 
-        Lifetime Lifetime { get; }
+        InstanceLifetime Lifetime { get; }
 
-        Type To { get; }
+        Type InjectedType { get; }
 
         void AsSingleton();
 
