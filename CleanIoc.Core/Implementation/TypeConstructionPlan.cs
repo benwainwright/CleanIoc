@@ -7,7 +7,7 @@
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
 
-    internal class TypeConstructionPlan : IInjectedParameter
+    internal class TypeConstructionPlan : IInjectedType
     {
         public Type Declared { get; }
 

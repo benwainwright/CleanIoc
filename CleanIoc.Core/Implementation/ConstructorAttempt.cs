@@ -6,7 +6,7 @@
 
     internal class ConstructorAttempt : IConstructorAttempt, IExecutableConstructor
     {
-        public IEnumerable<IInjectedParameter> Parameters => plans;
+        public IEnumerable<IInjectedType> Parameters => plans;
 
         private IList<TypeConstructionPlan> plans;
 

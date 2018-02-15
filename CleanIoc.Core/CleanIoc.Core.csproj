@@ -61,7 +61,7 @@
     <Compile Include="Enums\ScanBehaviour.cs" />
     <Compile Include="Exceptions\CleanIocException.cs" />
     <Compile Include="Interfaces\IAttemptedConstructor.cs" />
-    <Compile Include="Interfaces\IInjectedParameter.cs" />
+    <Compile Include="Interfaces\IInjectedType.cs" />
     <Compile Include="Interfaces\IContainerBuilder.cs" />
     <Compile Include="Implementation\RegistryAssemblyLoader.cs" />
     <Compile Include="Interfaces\IAssemblyLoader.cs" />

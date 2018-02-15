@@ -41,9 +41,10 @@
             allPlans[registration.From].Add(new TypeConstructionPlan(registration, allPlans, ConstructorSelectionStrategy));
         }
 
-        public IList<object> GetInstances(Type from)
+        public IList<object> GetInstances(Type from, out List<IInjectedType> failed)
         {
             var returnVal = new List<object>();
+            failed = new List<IInjectedType>();
             HashSet<TypeConstructionPlan> plans;
             try {
                 plans = allPlans[from];
@@ -53,6 +54,8 @@
             foreach(var plan in plans) {
                 if(plan.CanBeConstructed()) {
                     returnVal.Add(plan.GetInstance());
+                } else {
+                    failed.Add(plan);
                 }
             }
             return returnVal;

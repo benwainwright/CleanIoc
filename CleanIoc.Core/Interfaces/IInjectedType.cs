@@ -4,7 +4,7 @@ using CleanIoc.Core.Enums;
 
 namespace CleanIoc.Core.Implementation
 {
-    public interface IInjectedParameter
+    public interface IInjectedType
     {
         Type Declared { get; }
 

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Implementation;
 
     public interface ITypeRepository : IDisposable
     {
@@ -10,6 +10,6 @@
 
         void AddRegistration(ITypeRegistration registration);
 
-        IList<object> GetInstances(Type from);
+        IList<object> GetInstances(Type from, out List<IInjectedType> failed);
     }
 }

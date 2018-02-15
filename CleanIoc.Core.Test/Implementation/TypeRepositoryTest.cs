@@ -18,7 +18,7 @@ namespace CleanIoc.Core.Test.Implementation
     {
 
         [Test]
-        public void TestThatTypeRepositoryThrowsAnExceptionIfItIsUnableToSatisfyADependency()
+        public void TestThatTypeRepositoryReturnsNoInstanceAndAFailedPlanIfADependencyCannotBeSatisfied()
         {
             var repository = new TypeRepository();
 
@@ -38,17 +38,21 @@ namespace CleanIoc.Core.Test.Implementation
             repository.AddRegistration(third);
 
 
-            var firstInstances = repository.GetInstances(typeof(ISimpleInterface));
+            var firstInstances = repository.GetInstances(typeof(ISimpleInterface), out List<IInjectedType> failed);
             Assert.That(firstInstances, Is.Not.Null);
             Assert.That(firstInstances, Has.Count.EqualTo(1));
             Assert.That(firstInstances[0] as EmptyClassWithDefaultConstructor, Is.Not.Null);
 
-            var secondInstances = repository.GetInstances(typeof(ISecondInterface));
+            var secondInstances = repository.GetInstances(typeof(ISecondInterface), out failed);
             Assert.That(secondInstances, Is.Not.Null);
             Assert.That(secondInstances, Has.Count.EqualTo(1));
-            Assert.That(secondInstances[0] as EmptyClassWithThatOneSimpleObjectInItsConstructor, Is.Not.Null);           
+            Assert.That(secondInstances[0] as EmptyClassWithThatOneSimpleObjectInItsConstructor, Is.Not.Null);
 
-            Assert.That(() => repository.GetInstances(typeof(IThirdInterface)), Throws.InstanceOf<UnableToConstructException>());
+            var finalInstances = repository.GetInstances(typeof(IThirdInterface), out failed);
+            Assert.That(finalInstances, Is.Not.Null);
+            Assert.That(finalInstances, Is.Empty);
+            Assert.That(failed, Is.Not.Null);
+            Assert.That(failed, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -60,7 +64,7 @@ namespace CleanIoc.Core.Test.Implementation
             var repository = new TypeRepository();
             repository.AddRegistration(registration);
 
-            var instances = repository.GetInstances(typeof(ISimpleInterface));
+            var instances = repository.GetInstances(typeof(ISimpleInterface), out List<IInjectedType> failed);
 
             Assert.That(instances, Is.Not.Null);
             Assert.That(instances, Has.Count.EqualTo(1));
@@ -82,12 +86,12 @@ namespace CleanIoc.Core.Test.Implementation
             };
             repository.AddRegistration(second);
             
-            var firstInstances = repository.GetInstances(typeof(ISimpleInterface));
+            var firstInstances = repository.GetInstances(typeof(ISimpleInterface), out List <IInjectedType> failed);
             Assert.That(firstInstances, Is.Not.Null);
             Assert.That(firstInstances, Has.Count.EqualTo(1));
             Assert.That(firstInstances[0], Is.InstanceOf(typeof(EmptyClassWithDefaultConstructor)));
 
-            var secondInstances = repository.GetInstances(typeof(ISecondInterface));
+            var secondInstances = repository.GetInstances(typeof(ISecondInterface), out failed);
             Assert.That(secondInstances, Is.Not.Null);
             Assert.That(secondInstances, Has.Count.EqualTo(1));
             Assert.That(secondInstances[0], Is.InstanceOf(typeof(EmptyClassWithThatOneSimpleObjectInItsConstructor)));

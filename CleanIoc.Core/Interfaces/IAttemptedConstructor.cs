@@ -8,7 +8,7 @@ namespace CleanIoc.Core.Implementation
 {
     public interface IConstructorAttempt
     {
-        IEnumerable<IInjectedParameter> Parameters { get; }
+        IEnumerable<IInjectedType> Parameters { get; }
 
         bool Success { get; }
     }

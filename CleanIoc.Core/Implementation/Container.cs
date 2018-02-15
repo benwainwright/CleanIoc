@@ -63,7 +63,7 @@
                 Initialise();
                 Initialised = true;
             }
-            return Repository.GetInstances(from);
+            return Repository.GetInstances(from, out List<IInjectedType> failed);
         }
 
         private bool disposedValue = false;
