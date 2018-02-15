@@ -3,6 +3,7 @@
     using System;
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
+    using CleanIoc.Core.Utils;
 
     internal class TypeRegistration : ITypeRegistration
     {
@@ -14,6 +15,9 @@
 
         public TypeRegistration(Type from, Type to)
         {
+            Guard.Against.Null(from, nameof(from));
+            Guard.Against.Null(to, nameof(to));
+
             From = from;
             To = to;
         }

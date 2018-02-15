@@ -6,6 +6,7 @@
     using System.Reflection;
     using CleanIoc.Core.Enums;
     using CleanIoc.Core.Interfaces;
+    using CleanIoc.Core.Utils;
 
     internal class TypeConstructionPlan : IInjectedType
     {
@@ -35,9 +36,10 @@
 
         public TypeConstructionPlan(ITypeRegistration registration, Dictionary<Type, HashSet<TypeConstructionPlan>> otherPlans, IConstructorSelectionStrategy selector, MultipleMappingsBehaviour multipleMappingsBehaviour = MultipleMappingsBehaviour.FailConstruction)
         {
-            if(registration == null) {
-                throw new ArgumentNullException($"{nameof(registration)} cannot be null");
-            }
+            Guard.Against.Null(registration, nameof(registration));
+            Guard.Against.Null(otherPlans, nameof(otherPlans));
+            Guard.Against.Null(selector, nameof(selector));
+
             Declared = registration.From;
             Injected = registration.To;
             MultipleMappingsBehaviour = multipleMappingsBehaviour;

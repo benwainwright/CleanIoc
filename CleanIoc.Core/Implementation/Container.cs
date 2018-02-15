@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using CleanIoc.Core.Interfaces;
+    using CleanIoc.Core.Utils;
 
     internal class Container : ICleanIocContainer, IServiceProvider
     {
@@ -16,6 +17,7 @@
 
         internal Container(List<ITypeRegistry> registries)
         {
+            Guard.Against.Null(registries, nameof(registries));
             Registries = registries;
         }
 
