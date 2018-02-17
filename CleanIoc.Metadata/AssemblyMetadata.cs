@@ -15,8 +15,8 @@ namespace CleanIoc.Metadata
     using System.Reflection.Metadata;
     using System.Reflection.PortableExecutable;
     using System.Runtime.InteropServices;
-    using CleanIoc.Metadata.Entities;
-    using CleanIoc.Metadata.Entities.Base;
+    using MetadataScanner.Entities;
+    using MetadataScanner.Entities.Base;
 
     public class AssemblyMetadata
     {
@@ -70,7 +70,7 @@ namespace CleanIoc.Metadata
             assemblyReferences = AssemblyRef.LoadReferences(reader);
             typeDefinitions = TypeDef.LoadDefinitions(reader);
             typeReferences = TypeRef.LoadReferences(reader, assemblyReferences);
-            LinkBaseTypes(typeDefinitions, typeReferences);
+            LinkTypes(typeDefinitions, typeReferences);
             pinnedHandle.Free();
         }
 
@@ -79,7 +79,7 @@ namespace CleanIoc.Metadata
             return $"{Name} {Version}";
         }
 
-        private static void LinkBaseTypes(IEnumerable<TypeDef> definitions, IEnumerable<TypeRef> references)
+        private static void LinkTypes(IEnumerable<TypeDef> definitions, IEnumerable<TypeRef> references)
         {
             var allTypes = new List<LocalTypeEntity>();
             allTypes.AddRange(definitions);

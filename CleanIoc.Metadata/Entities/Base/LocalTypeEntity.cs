@@ -6,11 +6,11 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-namespace CleanIoc.Metadata.Entities.Base
+namespace MetadataScanner.Entities.Base
 {
     using System;
 
-    public class LocalTypeEntity : TypeEntity, IEquatable<LocalTypeEntity>
+    public abstract class LocalTypeEntity : TypeEntity, IEquatable<LocalTypeEntity>
     {
         private const int HashingPrimeSeventeen = 17;
 
@@ -34,6 +34,8 @@ namespace CleanIoc.Metadata.Entities.Base
         }
 
         public string Namespace { get; }
+
+        public abstract bool ImplementsInterface(LocalTypeEntity entity);
 
         public override bool Equals(object other)
         {

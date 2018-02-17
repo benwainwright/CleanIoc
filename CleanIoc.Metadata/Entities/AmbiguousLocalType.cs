@@ -6,29 +6,20 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-namespace MetadataScanner.Entities.Base
+using MetadataScanner.Entities.Base;
+
+namespace MetadataScanner.Entities
 {
-    using MetadataScanner.Enums;
-
-    public class TypeEntity : EntityWithToken
+    public class AmbiguousLocalType : LocalTypeEntity
     {
-        public TypeEntity(string name, int token)
-            : base(token, ResolutionStatus.Resolved)
-        {
-            Name = name;
-        }
-
-        public TypeEntity(string name)
-            : base(ResolutionStatus.UnResolved)
-        {
-            Name = name;
-        }
-
-        public TypeEntity(int token)
-            : base(token, ResolutionStatus.UnResolved)
+        public AmbiguousLocalType(int token)
+            : base(token)
         {
         }
 
-        public string Name { get; }
+        public override bool ImplementsInterface(LocalTypeEntity entity)
+        {
+            return false;
+        }
     }
 }

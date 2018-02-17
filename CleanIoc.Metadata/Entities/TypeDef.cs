@@ -6,14 +6,15 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-namespace CleanIoc.Metadata.Entities
+namespace MetadataScanner.Entities
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Reflection.Metadata;
     using System.Reflection.Metadata.Ecma335;
-    using CleanIoc.Metadata.Entities.Base;
-    using CleanIoc.Metadata.Enums;
+    using MetadataScanner.Entities.Base;
+    using MetadataScanner.Enums;
 
     public class TypeDef : LocalTypeEntity
     {
@@ -26,9 +27,10 @@ namespace CleanIoc.Metadata.Entities
                 reader.GetToken(handle))
         {
             definition = reader.GetTypeDefinition(handle);
-            BaseType = new TypeEntity(reader.GetToken(definition.BaseType));
+            BaseType = new AmbiguousLocalType(reader.GetToken(definition.BaseType));
+            Attributes = definition.Attributes;
             foreach (var implementation in definition.GetInterfaceImplementations()) {
-                var newInterface = new LocalTypeEntity(reader.GetToken(reader.GetInterfaceImplementation(implementation).Interface));
+                var newInterface = new AmbiguousLocalType(reader.GetToken(reader.GetInterfaceImplementation(implementation).Interface));
                 InterfaceImplementations.Add(newInterface);
             }
         }
@@ -38,7 +40,41 @@ namespace CleanIoc.Metadata.Entities
         {
         }
 
-        public TypeEntity BaseType { get; private set; }
+        public TypeDef(int token)
+            : base(token)
+        {
+        }
+
+        public LocalTypeEntity BaseType { get; private set; }
+
+        public TypeAttributes Attributes { get; }
+
+        public bool IsInterface => (Attributes & TypeAttributes.Interface) != 0;
+
+        public override bool ImplementsInterface(LocalTypeEntity theInterface)
+        {
+            if (theInterface is TypeDef otherInterface && !otherInterface.IsInterface) {
+                return false;
+            }
+
+            if (InterfaceImplementations.Contains(theInterface)) {
+                return true;
+            }
+
+            foreach (var implementation in InterfaceImplementations) {
+                if (implementation.ImplementsInterface(theInterface)) {
+                    return true;
+                }
+            }
+
+            if (BaseType?.ResolutionStatus == ResolutionStatus.Resolved) {
+                if (BaseType.ImplementsInterface(theInterface)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public List<LocalTypeEntity> InterfaceImplementations { get; private set; } = new List<LocalTypeEntity>();
 

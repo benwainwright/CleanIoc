@@ -6,9 +6,9 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-namespace CleanIoc.Metadata.Entities.Base
+namespace MetadataScanner.Entities.Base
 {
-    using CleanIoc.Metadata.Enums;
+    using MetadataScanner.Enums;
 
     public abstract class EntityWithToken
     {

@@ -6,15 +6,15 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-namespace CleanIoc.Metadata.Entities
+namespace MetadataScanner.Entities
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection.Metadata;
     using System.Reflection.Metadata.Ecma335;
-    using CleanIoc.Metadata.Entities.Base;
-    using CleanIoc.Metadata.Enums;
+    using MetadataScanner.Entities.Base;
+    using MetadataScanner.Enums;
 
     public class TypeRef : LocalTypeEntity
     {
@@ -40,6 +40,15 @@ namespace CleanIoc.Metadata.Entities
                         select new TypeRef(reader, type, assemblies);
 
             return query.ToList();
+        }
+
+        public override bool ImplementsInterface(LocalTypeEntity entity)
+        {
+            if (Definition.ResolutionStatus != ResolutionStatus.UnResolved) {
+                return Definition.ImplementsInterface(entity);
+            }
+
+            return false;
         }
 
         public void ResolveTypesFromLinkedAssembly()

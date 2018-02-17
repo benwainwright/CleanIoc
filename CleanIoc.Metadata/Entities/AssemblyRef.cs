@@ -6,7 +6,7 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-namespace CleanIoc.Metadata.Entities
+namespace MetadataScanner.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace CleanIoc.Metadata.Entities
     using System.Reflection;
     using System.Reflection.Metadata;
     using System.Reflection.Metadata.Ecma335;
-    using CleanIoc.Metadata.Entities.Base;
+    using MetadataScanner.Base;
 
     public class AssemblyRef : TypeEntity
     {
