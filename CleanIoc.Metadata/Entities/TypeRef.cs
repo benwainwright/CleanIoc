@@ -18,12 +18,12 @@
         {
             var reference = reader.GetTypeReference(handle);
             Assembly = GetAssembly(assemblies, reader.GetToken(reference.ResolutionScope));
-            Definition = new LocalTypeEntity(Name, Namespace);
+            Definition = new TypeDef(Name, Namespace);
         }
 
         public AssemblyRef Assembly { get; }
 
-        public TypeEntity Definition { get; private set; }
+        public TypeDef Definition { get; private set; }
 
         public static List<TypeRef> LoadReferences(MetadataReader reader, IEnumerable<AssemblyRef> assemblies)
         {
@@ -36,7 +36,7 @@
 
         public void ResolveTypesFromLinkedAssembly()
         {
-            if (Definition.ResolutionStatus == ResolutionStatus.UnResolved || Assembly == null) {
+            if (Definition.ResolutionStatus == ResolutionStatus.Resolved || Assembly == null) {
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿namespace CleanIoc.Metadata.Entities
+﻿namespace CleanIoc.Metadata.Entities.Base
 {
     using CleanIoc.Metadata.Enums;
 

@@ -8,6 +8,7 @@
     using System.Reflection.PortableExecutable;
     using System.Runtime.InteropServices;
     using CleanIoc.Metadata.Entities;
+    using CleanIoc.Metadata.Entities.Base;
 
     public class AssemblyMetadata : IDisposable
     {
@@ -90,12 +91,13 @@
 
         private static void LinkBaseTypes(IEnumerable<TypeDef> definitions, IEnumerable<TypeRef> references)
         {
-            var allTypes = new List<TypeEntity>();
+            var allTypes = new List<LocalTypeEntity>();
             allTypes.AddRange(definitions);
             allTypes.AddRange(references);
 
             foreach (var type in definitions) {
                 type.LinkBaseType(allTypes);
+                type.LinkInterfaceImplementations(allTypes);
             }
         }
 

@@ -5,6 +5,12 @@
 	  <CodeAnalysisRuleSet>../analysis.ruleset</CodeAnalysisRuleSet>  
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\Base - Copy\**" />
+    <EmbeddedResource Remove="Entities\Base - Copy\**" />
+    <None Remove="Entities\Base - Copy\**" />
+  </ItemGroup>
   
   <ItemGroup>
 	  <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />

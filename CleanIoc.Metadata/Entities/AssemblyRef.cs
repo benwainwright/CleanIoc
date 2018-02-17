@@ -6,7 +6,7 @@
     using System.Reflection;
     using System.Reflection.Metadata;
     using System.Reflection.Metadata.Ecma335;
-    using CleanIoc.Metadata.Enums;
+    using CleanIoc.Metadata.Entities.Base;
 
     public class AssemblyRef : TypeEntity
     {
@@ -25,8 +25,6 @@
         public AssemblyMetadata MetaData { get; private set; }
 
         public string Culture { get; }
-
-        public string Name { get; }
 
         public List<byte> PublicKeyOrToken { get; }
 
