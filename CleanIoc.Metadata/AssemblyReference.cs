@@ -5,10 +5,12 @@
     using System.Linq;
     using System.Reflection;
     using System.Reflection.Metadata;
+    using System.Reflection.Metadata.Ecma335;
 
-    public class AssemblyReference
+    public class AssemblyReference : EntityWithToken
     {
         public AssemblyReference(MetadataReader reader, AssemblyReferenceHandle handle)
+            : base(reader.GetToken(handle))
         {
             var reference = reader.GetAssemblyReference(handle);
             Name = reader.GetString(reference.Name);
@@ -35,6 +37,11 @@
                         select new AssemblyReference(reader, reference);
 
             return query.ToList();
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} {Version}";
         }
     }
 }

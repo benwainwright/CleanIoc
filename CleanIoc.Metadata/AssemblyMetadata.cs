@@ -19,6 +19,10 @@
 
         private List<AssemblyReference> assemblyReferences;
 
+        private List<TypeDefinition> typeDefinitions;
+
+        private List<TypeReference> typeReferences;
+
         public AssemblyMetadata(string path)
         {
             FilePath = path;
@@ -33,6 +37,31 @@
                 }
 
                 return assemblyReferences;
+            }
+        }
+
+        public IEnumerable<TypeDefinition> TypeDefinitions
+        {
+            get
+            {
+                if (typeDefinitions == null) {
+                    typeDefinitions = TypeDefinition.LoadDefinitions(Reader);
+                    LinkBaseTypes(typeDefinitions, TypeReferences);
+                }
+
+                return typeDefinitions;
+            }
+        }
+
+        public IEnumerable<TypeReference> TypeReferences
+        {
+            get
+            {
+                if (typeReferences == null) {
+                    typeReferences = TypeReference.LoadReferences(Reader, AssemblyReferences);
+                }
+
+                return typeReferences;
             }
         }
 
@@ -62,6 +91,17 @@
                 }
 
                 disposed = true;
+            }
+        }
+
+        private static void LinkBaseTypes(IEnumerable<TypeDefinition> definitions, IEnumerable<TypeReference> references)
+        {
+            var allTypes = new List<TypeEntity>();
+            allTypes.AddRange(definitions);
+            allTypes.AddRange(references);
+
+            foreach (var type in definitions) {
+                type.LinkBaseType(allTypes);
             }
         }
 
