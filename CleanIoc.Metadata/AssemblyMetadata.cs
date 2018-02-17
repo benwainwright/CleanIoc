@@ -18,11 +18,9 @@ namespace CleanIoc.Metadata
     using CleanIoc.Metadata.Entities;
     using CleanIoc.Metadata.Entities.Base;
 
-    public class AssemblyMetadata : IDisposable
+    public class AssemblyMetadata
     {
         private readonly MetadataReader reader;
-
-        private bool disposed = false;
 
         private byte[] buffer;
 
@@ -73,28 +71,12 @@ namespace CleanIoc.Metadata
             typeDefinitions = TypeDef.LoadDefinitions(reader);
             typeReferences = TypeRef.LoadReferences(reader, assemblyReferences);
             LinkBaseTypes(typeDefinitions, typeReferences);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            pinnedHandle.Free();
         }
 
         public override string ToString()
         {
             return $"{Name} {Version}";
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed) {
-                if (disposing && reader != null) {
-                    pinnedHandle.Free();
-                }
-
-                disposed = true;
-            }
         }
 
         private static void LinkBaseTypes(IEnumerable<TypeDef> definitions, IEnumerable<TypeRef> references)
