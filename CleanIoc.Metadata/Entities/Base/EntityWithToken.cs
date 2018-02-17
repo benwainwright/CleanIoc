@@ -10,9 +10,9 @@
             ResolutionStatus = resolutionStatus;
         }
 
-        public EntityWithToken()
+        public EntityWithToken(ResolutionStatus resolutionStatus)
         {
-            ResolutionStatus = ResolutionStatus.UnResolved;
+            ResolutionStatus = resolutionStatus;
         }
 
         public int Token { get; }

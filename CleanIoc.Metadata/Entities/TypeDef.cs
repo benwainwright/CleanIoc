@@ -5,8 +5,9 @@
     using System.Reflection.Metadata;
     using System.Reflection.Metadata.Ecma335;
     using CleanIoc.Metadata.Enums;
+    using CleanIoc.Metadata.Entities.Base;
 
-    public class TypeDef : TypeEntity
+    public class TypeDef : LocalTypeEntity
     {
         private readonly System.Reflection.Metadata.TypeDefinition definition;
 

@@ -5,8 +5,10 @@
     using System.Linq;
     using System.Reflection.Metadata;
     using System.Reflection.Metadata.Ecma335;
+    using CleanIoc.Metadata.Entities.Base;
+    using CleanIoc.Metadata.Enums;
 
-    public class TypeRef : TypeEntity
+    public class TypeRef : LocalTypeEntity
     {
         public TypeRef(MetadataReader reader, TypeReferenceHandle handle, IEnumerable<AssemblyRef> assemblies)
             : base(
@@ -16,13 +18,12 @@
         {
             var reference = reader.GetTypeReference(handle);
             Assembly = GetAssembly(assemblies, reader.GetToken(reference.ResolutionScope));
-
-
+            Definition = new LocalTypeEntity(Name, Namespace);
         }
 
         public AssemblyRef Assembly { get; }
 
-        public TypeDef ResolvedType { get; private set; }
+        public TypeEntity Definition { get; private set; }
 
         public static List<TypeRef> LoadReferences(MetadataReader reader, IEnumerable<AssemblyRef> assemblies)
         {
@@ -35,7 +36,7 @@
 
         public void ResolveTypesFromLinkedAssembly()
         {
-            if (ResolvedType != null || Assembly == null) {
+            if (Definition.ResolutionStatus == ResolutionStatus.UnResolved || Assembly == null) {
                 return;
             }
 
@@ -52,7 +53,7 @@
                               type.Namespace.Equals(Namespace, StringComparison.InvariantCulture)
                         select type;
 
-            ResolvedType = query.FirstOrDefault();
+            Definition = query.FirstOrDefault();
         }
 
         public override string ToString()

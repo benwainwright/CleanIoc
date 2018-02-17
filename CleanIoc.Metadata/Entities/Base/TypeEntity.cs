@@ -1,20 +1,19 @@
-﻿namespace CleanIoc.Metadata.Entities
+﻿namespace CleanIoc.Metadata.Entities.Base
 {
     using CleanIoc.Metadata.Enums;
 
     public class TypeEntity : EntityWithToken
     {
-        public TypeEntity(string name, string theNamespace, int token)
+        public TypeEntity(string name, int token)
             : base(token, ResolutionStatus.Resolved)
         {
             Name = name;
-            Namespace = theNamespace;
         }
 
-        public TypeEntity(string name, string theNamespace)
+        public TypeEntity(string name)
+            : base(ResolutionStatus.UnResolved)
         {
             Name = name;
-            Namespace = theNamespace;
         }
 
         public TypeEntity(int token)
@@ -23,7 +22,5 @@
         }
 
         public string Name { get; }
-
-        public string Namespace { get; }
     }
 }

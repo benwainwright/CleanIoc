@@ -8,13 +8,14 @@
     using System.Reflection.Metadata.Ecma335;
     using CleanIoc.Metadata.Enums;
 
-    public class AssemblyRef : EntityWithToken
+    public class AssemblyRef : TypeEntity
     {
         public AssemblyRef(MetadataReader reader, AssemblyReferenceHandle handle)
-            : base(reader.GetToken(handle), ResolutionStatus.Resolved)
+            : base(
+                  reader.GetString(reader.GetAssemblyReference(handle).Name),
+                  reader.GetToken(handle))
         {
             var reference = reader.GetAssemblyReference(handle);
-            Name = reader.GetString(reference.Name);
             Culture = reader.GetString(reference.Culture);
             PublicKeyOrToken = reader.GetBlobBytes(reference.PublicKeyOrToken).ToList();
             Version = reference.Version;
