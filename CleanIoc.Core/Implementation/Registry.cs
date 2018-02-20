@@ -22,7 +22,7 @@ namespace CleanIoc.Core
 
         private Type lastFromType;
 
-        public IEnumerable<KeyValuePair<Type, List<IRegistration>>> Registrations => types;        
+        public IEnumerable<KeyValuePair<Type, List<IRegistration>>> Registrations => types;
 
         public void ConstructorStrategy(IConstructorSelectionStrategy strategy)
         {

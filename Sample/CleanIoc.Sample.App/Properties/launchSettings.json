@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "CleanIoc.Sample.App": {
+      "commandName": "Project"
+    }
+  }
+}

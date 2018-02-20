@@ -15,11 +15,11 @@ namespace CleanIoc.Core.Implementation
 
     internal class Container : ICleanIocContainer, IServiceProvider
     {
-        private List<IRegistry> registries;
+        private readonly List<IRegistry> registries;
 
-        private Repository repository = new Repository();
+        private readonly Repository repository = new Repository();
 
-        private bool disposed = false;
+        private bool disposed;
 
         internal Container(List<IRegistry> registries)
         {
@@ -55,7 +55,7 @@ namespace CleanIoc.Core.Implementation
         public IList<T> GetAll<T>()
             where T : class
         {
-            Type from = typeof(T);
+            var from = typeof(T);
             var returnVal = new List<T>();
             var instances = InitialiseAndGetInstances(from);
             foreach (object instance in instances) {

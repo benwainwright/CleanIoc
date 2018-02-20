@@ -10,8 +10,12 @@ namespace CleanIoc.Core.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
     using CleanIoc.Core.Enums;
+    using CleanIoc.Core.Implementation.Loading;
     using CleanIoc.Core.Interfaces;
+    using System.Linq;
 
     internal class ContainerBuilder : IContainerBuilder, IDisposable
     {
@@ -77,7 +81,11 @@ namespace CleanIoc.Core.Implementation
         {
             var registries = new List<IRegistry>();
             var registryType = typeof(Registry);
-            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            var loadedAssemblies = from assembly
+                                   in AppDomain.CurrentDomain.GetAssemblies()
+                                   where !assembly.IsDynamic
+                                   select assembly;
 
             foreach (var assembly in loadedAssemblies) {
                 var types = assembly.GetExportedTypes();
@@ -95,7 +103,9 @@ namespace CleanIoc.Core.Implementation
         private void LoadAssemblies()
         {
             if (loaders.Count == 0) {
-                loaders.Add(new RegistryAssemblyLoader());
+                var assemblyLocation = Assembly.GetEntryAssembly().Location;
+
+                loaders.Add(new RegistryAssemblyLoader(Path.GetDirectoryName(assemblyLocation)));
             }
 
             foreach (var loader in loaders) {
